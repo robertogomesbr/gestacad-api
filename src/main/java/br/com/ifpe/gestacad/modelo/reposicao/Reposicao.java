@@ -33,7 +33,7 @@ public class Reposicao extends EntidadeAuditavel {
     private LocalTime horarioInicio;
 
     @Column
-    private LocalTime horaioFim;
+    private LocalTime horarioFim;
 
     @Column
     private Boolean statusReposicao;
