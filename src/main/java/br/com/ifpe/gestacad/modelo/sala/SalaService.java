@@ -37,7 +37,6 @@ public class SalaService {
         sala.setBlocoSelecionado(salaAlterada.getBlocoSelecionado());
         sala.setNumero(salaAlterada.getNumero());
         sala.setTipo(salaAlterada.getTipo());
-        sala.setStatus(salaAlterada.getStatus());
 
         repository.save(sala);
     }

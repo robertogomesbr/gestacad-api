@@ -32,6 +32,4 @@ public class Sala extends EntidadeAuditavel{
     @Column
     private String tipo;
 
-    @Column
-    private Boolean status;
 }

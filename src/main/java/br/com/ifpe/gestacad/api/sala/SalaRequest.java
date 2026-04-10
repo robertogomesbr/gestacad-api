@@ -26,7 +26,6 @@ public class SalaRequest {
             .blocoSelecionado(blocoSelecionado)
             .numero(numero)
             .tipo(tipo)
-            .status(status)
             .build();
     }
     
