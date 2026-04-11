@@ -34,6 +34,7 @@ public class ReservaService {
     public void update(Long id, Reserva reservaAlterado) {
 
         Reserva reserva = repository.findById(id).get();
+        reserva.setSala(reservaAlterado.getSala());
         reserva.setDataReserva(reservaAlterado.getDataReserva());
         reserva.setHorarioInicio(reservaAlterado.getHorarioInicio());
         reserva.setHorarioFim(reservaAlterado.getHorarioFim());

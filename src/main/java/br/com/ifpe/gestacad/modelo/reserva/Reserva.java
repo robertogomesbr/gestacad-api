@@ -5,9 +5,11 @@ import java.time.LocalTime;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +28,9 @@ import lombok.Setter;
 
 public class Reserva extends EntidadeAuditavel{
     
+    @ManyToOne
+    private Sala sala;
+
     @Column
     private LocalDate dataReserva;
 

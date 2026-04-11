@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.reserva.Reserva;
 import br.com.ifpe.gestacad.modelo.reserva.ReservaService;
+import br.com.ifpe.gestacad.modelo.sala.SalaService;
 
 @RestController
 @RequestMapping("/api/reserva")
@@ -26,10 +27,16 @@ public class ReservaController {
     @Autowired
     private ReservaService reservaService;
 
+    @Autowired
+    private SalaService salaService;
+
     @PostMapping
     public ResponseEntity<Reserva> save(@RequestBody ReservaRequest request) {
         
-        Reserva reserva = reservaService.save(request.build());
+        Reserva reservaNovo = request.build();
+        reservaNovo.setSala(salaService.obterPorID(request.getIdSala()));
+        Reserva reserva = reservaService.save(reservaNovo);
+
         return new ResponseEntity<Reserva>(reserva, HttpStatus.CREATED);
     }
 
@@ -48,7 +55,10 @@ public class ReservaController {
     @PutMapping("/{id}")
     public ResponseEntity<Reserva> update(@PathVariable("id") Long id, @RequestBody ReservaRequest request) {
 
-        reservaService.update(id, request.build());
+        Reserva reserva = request.build();
+        reserva.setSala(salaService.obterPorID(request.getIdSala()));
+        reservaService.update(id, reserva);
+        
         return ResponseEntity.ok().build();
     }
 

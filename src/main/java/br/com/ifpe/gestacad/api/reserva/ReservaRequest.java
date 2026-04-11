@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReservaRequest {
+
+    private Long idSala;
     
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataReserva;
