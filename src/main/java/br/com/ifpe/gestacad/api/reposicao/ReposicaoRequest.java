@@ -16,6 +16,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReposicaoRequest {
+
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataAulaOriginal;
     
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataReposicao;
@@ -31,6 +34,7 @@ public class ReposicaoRequest {
     public Reposicao build() {
 
         return Reposicao.builder()
+            .dataAulaOriginal(dataAulaOriginal)
             .dataReposicao(dataReposicao)
             .horarioInicio(horarioInicio)
             .horarioFim(horarioFim)

@@ -27,6 +27,9 @@ import lombok.Setter;
 public class Reposicao extends EntidadeAuditavel {
     
     @Column
+    private LocalDate dataAulaOriginal;
+
+    @Column
     private LocalDate dataReposicao;
 
     @Column
