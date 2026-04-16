@@ -1,5 +1,7 @@
 package br.com.ifpe.gestacad.modelo.horario;
 
-public class HorarioRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface HorarioRepository extends JpaRepository<Horario, Long>{
     
 }
