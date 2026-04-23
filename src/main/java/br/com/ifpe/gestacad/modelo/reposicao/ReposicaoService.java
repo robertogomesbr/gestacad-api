@@ -34,6 +34,10 @@ public class ReposicaoService {
     public void update(Long id, Reposicao reposicaoAlterada) {
 
         Reposicao reposicao = repository.findById(id).get();
+        reposicao.setDisciplina(reposicaoAlterada.getDisciplina());
+        reposicao.setTurma(reposicaoAlterada.getTurma());
+        reposicao.setProfessor(reposicaoAlterada.getProfessor());
+        reposicao.setSala(reposicaoAlterada.getSala());
         reposicao.setDataAulaOriginal(reposicaoAlterada.getDataAulaOriginal());
         reposicao.setDataReposicao(reposicaoAlterada.getDataReposicao());
         reposicao.setHorarioInicio(reposicaoAlterada.getHorarioInicio());

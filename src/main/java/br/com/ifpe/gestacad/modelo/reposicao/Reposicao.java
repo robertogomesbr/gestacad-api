@@ -5,9 +5,14 @@ import java.time.LocalTime;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
+import br.com.ifpe.gestacad.modelo.professor.Professor;
+import br.com.ifpe.gestacad.modelo.sala.Sala;
+import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +31,18 @@ import lombok.Setter;
 
 public class Reposicao extends EntidadeAuditavel {
     
+    @ManyToOne
+    private Disciplina disciplina;
+
+    @ManyToOne
+    private Turma turma;
+
+    @ManyToOne
+    private Professor professor;
+    
+    @ManyToOne
+    private Sala sala;
+
     @Column
     private LocalDate dataAulaOriginal;
 

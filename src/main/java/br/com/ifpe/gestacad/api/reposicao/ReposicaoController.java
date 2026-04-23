@@ -15,8 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
+import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
 import br.com.ifpe.gestacad.modelo.reposicao.ReposicaoService;
+import br.com.ifpe.gestacad.modelo.sala.SalaService;
+import br.com.ifpe.gestacad.modelo.turma.TurmaService;
 
 @RestController
 @RequestMapping("/api/reposicao")
@@ -26,10 +30,28 @@ public class ReposicaoController {
     @Autowired
     private ReposicaoService reposicaoService;
 
+    @Autowired
+    private DisciplinaService disciplinaService;
+
+    @Autowired
+    private TurmaService turmaService;
+
+    @Autowired
+    private ProfessorService professorService;
+
+    @Autowired
+    private SalaService salaService;
+
     @PostMapping
     public ResponseEntity<Reposicao> save(@RequestBody ReposicaoRequest request) {
         
-        Reposicao reposicao = reposicaoService.save(request.build());
+        Reposicao reposicaoNova = request.build();
+        reposicaoNova.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));
+        reposicaoNova.setTurma(turmaService.obterPorID(request.getIdTurma()));
+        reposicaoNova.setProfessor(professorService.obterPorID(request.getIdProfessor()));
+        reposicaoNova.setSala(salaService.obterPorID(request.getIdSala()));
+        Reposicao reposicao = reposicaoService.save(reposicaoNova);
+
         return new ResponseEntity<Reposicao>(reposicao, HttpStatus.CREATED);
     }
 
@@ -48,7 +70,13 @@ public class ReposicaoController {
     @PutMapping("/{id}")
     public ResponseEntity<Reposicao> update(@PathVariable("id") Long id, @RequestBody ReposicaoRequest request) {
 
-        reposicaoService.update(id, request.build());
+        Reposicao reposicao = request.build();
+        reposicao.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));
+        reposicao.setTurma(turmaService.obterPorID(request.getIdTurma()));
+        reposicao.setProfessor(professorService.obterPorID(request.getIdProfessor()));
+        reposicao.setSala(salaService.obterPorID(request.getIdSala()));
+        reposicaoService.update(id, reposicao);
+        
         return ResponseEntity.ok().build();
     }
 
