@@ -5,6 +5,7 @@ import java.time.LocalTime;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
@@ -30,6 +31,9 @@ public class Reserva extends EntidadeAuditavel{
     
     @ManyToOne
     private Sala sala;
+
+    @ManyToOne
+    private Professor professor;
 
     @Column
     private LocalDate dataReserva;

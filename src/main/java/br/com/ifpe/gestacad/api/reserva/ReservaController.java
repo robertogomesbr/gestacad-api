@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.reserva.Reserva;
+import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.reserva.ReservaService;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 
@@ -23,18 +24,22 @@ import br.com.ifpe.gestacad.modelo.sala.SalaService;
 @RequestMapping("/api/reserva")
 @CrossOrigin
 public class ReservaController {
-    
+
     @Autowired
     private ReservaService reservaService;
 
     @Autowired
     private SalaService salaService;
 
+    @Autowired
+    private ProfessorService professorService;
+
     @PostMapping
     public ResponseEntity<Reserva> save(@RequestBody ReservaRequest request) {
         
         Reserva reservaNovo = request.build();
         reservaNovo.setSala(salaService.obterPorID(request.getIdSala()));
+        reservaNovo.setProfessor(professorService.obterPorID(request.getIdProfessor()));
         Reserva reserva = reservaService.save(reservaNovo);
 
         return new ResponseEntity<Reserva>(reserva, HttpStatus.CREATED);
@@ -57,6 +62,7 @@ public class ReservaController {
 
         Reserva reserva = request.build();
         reserva.setSala(salaService.obterPorID(request.getIdSala()));
+        reserva.setProfessor(professorService.obterPorID(request.getIdProfessor()));
         reservaService.update(id, reserva);
         
         return ResponseEntity.ok().build();
