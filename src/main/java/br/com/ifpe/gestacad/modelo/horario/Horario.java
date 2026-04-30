@@ -2,9 +2,13 @@ package br.com.ifpe.gestacad.modelo.horario;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,8 +26,12 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class Horario extends EntidadeAuditavel {
-    
+
+    @JsonIgnore
+    @ManyToOne
+    private Disciplina disciplina;
+
     @Column
     private String horario;
-    
+
 }

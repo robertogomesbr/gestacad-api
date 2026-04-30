@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DisciplinaRequest {
 
+    private Long idProfessor;
+    private Long idTurma;
     private String nome;
     private String area;
     private LocalTime horarioInicio;
