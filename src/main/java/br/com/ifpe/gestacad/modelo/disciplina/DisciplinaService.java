@@ -44,9 +44,7 @@ public class DisciplinaService {
         disciplina.setTurma(disciplinaAlterada.getTurma());
         disciplina.setNome(disciplinaAlterada.getNome());
         disciplina.setArea(disciplinaAlterada.getArea());
-        disciplina.setHorarioInicio(disciplinaAlterada.getHorarioInicio());
-        disciplina.setHorarioFim(disciplinaAlterada.getHorarioFim());
-
+        disciplina.setTurno(disciplinaAlterada.getTurno());
         repository.save(disciplina);
     }
 
@@ -72,14 +70,14 @@ public class DisciplinaService {
 
         // Depois acrescenta o endereço criado ao disciplina e atualiza o disciplina:
 
-        List<Horario> listaHorario = disciplina.getHorario();
+        List<Horario> listaHorario = disciplina.getHorarios();
 
         if (listaHorario == null) {
             listaHorario = new ArrayList<>();
         }
 
         listaHorario.add(horario);
-        disciplina.setHorario(listaHorario);
+        disciplina.setHorarios(listaHorario);
         repository.save(disciplina);
 
         return horario;
@@ -102,7 +100,7 @@ public class DisciplinaService {
         horarioRepository.save(horario);
 
         Disciplina disciplina = this.obterPorID(horario.getDisciplina().getId());
-        disciplina.getHorario().remove(horario);
+        disciplina.getHorarios().remove(horario);
         repository.save(disciplina);
     }
 

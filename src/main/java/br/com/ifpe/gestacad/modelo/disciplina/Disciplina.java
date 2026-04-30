@@ -1,6 +1,5 @@
 package br.com.ifpe.gestacad.modelo.disciplina;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
@@ -38,8 +37,8 @@ public class Disciplina extends EntidadeAuditavel {
     @ManyToOne
     private Turma turma;
 
-    @OneToMany(mappedBy = "horario", orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Horario> horario;
+    @OneToMany(mappedBy = "disciplina", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Horario> horarios;
 
     @Column
     private String nome;
@@ -48,9 +47,6 @@ public class Disciplina extends EntidadeAuditavel {
     private String area;
 
     @Column
-    private LocalTime horarioInicio;
-
-    @Column
-    private LocalTime horarioFim;
+    private String turno;
 
 }
