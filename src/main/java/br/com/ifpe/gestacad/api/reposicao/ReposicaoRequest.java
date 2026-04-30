@@ -17,6 +17,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ReposicaoRequest {
 
+    private Long idDisciplina;
+
+    private Long idTurma;
+
+    private Long idProfessor;
+
+    private Long idSala;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataAulaOriginal;
     

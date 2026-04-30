@@ -35,6 +35,7 @@ public class ReservaService {
 
         Reserva reserva = repository.findById(id).get();
         reserva.setSala(reservaAlterado.getSala());
+        reserva.setProfessor(reservaAlterado.getProfessor());
         reserva.setDataReserva(reservaAlterado.getDataReserva());
         reserva.setHorarioInicio(reservaAlterado.getHorarioInicio());
         reserva.setHorarioFim(reservaAlterado.getHorarioFim());
