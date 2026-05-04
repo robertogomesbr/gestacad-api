@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/sala")
@@ -27,7 +28,7 @@ public class SalaController {
     private SalaService salaService;
 
     @PostMapping
-    public ResponseEntity<Sala> save(@RequestBody SalaRequest request) {
+    public ResponseEntity<Sala> save(@RequestBody @Valid SalaRequest request) {
         
         Sala sala = salaService.save(request.build());
         return new ResponseEntity<Sala>(sala, HttpStatus.CREATED);
@@ -46,7 +47,7 @@ public class SalaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sala> update(@PathVariable("id") Long id, @RequestBody SalaRequest request) {
+    public ResponseEntity<Sala> update(@PathVariable("id") Long id, @RequestBody @Valid SalaRequest request) {
 
         salaService.update(id, request.build());
         return ResponseEntity.ok().build();

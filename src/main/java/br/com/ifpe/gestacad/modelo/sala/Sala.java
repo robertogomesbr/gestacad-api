@@ -23,13 +23,13 @@ import lombok.Setter;
 
 public class Sala extends EntidadeAuditavel{
     
-    @Column
+    @Column(nullable = false, length = 50)
     private String blocoSelecionado;
 
-    @Column
+    @Column(nullable = false)
     private Integer numero;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String tipo;
 
 }

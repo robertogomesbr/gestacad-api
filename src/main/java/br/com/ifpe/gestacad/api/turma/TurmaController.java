@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/turma")
@@ -27,7 +28,7 @@ public class TurmaController {
     private TurmaService turmaService;
 
     @PostMapping
-    public ResponseEntity<Turma> save(@RequestBody TurmaRequest request) {
+    public ResponseEntity<Turma> save(@RequestBody @Valid TurmaRequest request) {
 
         Turma turma = turmaService.save(request.build());
         return new ResponseEntity<Turma>(turma, HttpStatus.CREATED);
@@ -46,7 +47,7 @@ public class TurmaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Turma> update(@PathVariable("id") Long id, @RequestBody TurmaRequest request) {
+    public ResponseEntity<Turma> update(@PathVariable("id") Long id, @RequestBody @Valid TurmaRequest request) {
 
         turmaService.update(id, request.build());
         return ResponseEntity.ok().build();

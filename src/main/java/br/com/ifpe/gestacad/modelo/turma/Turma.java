@@ -23,10 +23,10 @@ import lombok.Setter;
 
 public class Turma extends EntidadeAuditavel {
 
-    @Column
+    @Column(nullable = false)
     private Integer periodo;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String curso;
 
 }
