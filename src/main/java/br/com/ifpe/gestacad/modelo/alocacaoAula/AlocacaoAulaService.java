@@ -44,6 +44,7 @@ public class AlocacaoAulaService {
         alocacaoAula.setDisciplina(alocacaoAulaAlterado.getDisciplina());
         alocacaoAula.setSala(alocacaoAulaAlterado.getSala());
         alocacaoAula.setProfessor(alocacaoAulaAlterado.getProfessor());
+        alocacaoAula.setSemestreLetivo(alocacaoAulaAlterado.getSemestreLetivo());
 
         repository.save(alocacaoAula);
     }

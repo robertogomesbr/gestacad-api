@@ -10,6 +10,7 @@ import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
@@ -46,5 +47,8 @@ public class AlocacaoAula extends EntidadeAuditavel{
 
     @OneToMany(mappedBy = "alocacaoAula", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Horario> horarios;
+
+    @Column
+    private String semestreLetivo;
 
 }

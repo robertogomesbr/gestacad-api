@@ -19,10 +19,13 @@ public class AlocacaoAulaRequest {
     private Long idSala;
 
     private Long idProfessor;
+
+    private String semestreLetivo;
     
     public AlocacaoAula build() {
 
         return AlocacaoAula.builder()
+            .semestreLetivo(semestreLetivo)
             .build();
     }
 }
