@@ -28,22 +28,22 @@ public class Turma extends EntidadeAuditavel {
     @ManyToOne
     private Curso curso;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column
+    @Column(nullable = false)
     private Integer anoEntrada;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String semestreEntrada;
 
-    @Column
+    @Column(nullable = false)
     private Integer qtdMaximaAlunos;
 
-    @Column
+    @Column(nullable = false)
     private Integer qtdAlunosMatriculados;
     
-    @Column
+    @Column(nullable = false)
     private Boolean statusTurma;
 
 }
