@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DisciplinaRequest {
 
+    private Long idCurso;
+
     private String nome;
     private Integer chTotal;
     private String periodoOfertado;

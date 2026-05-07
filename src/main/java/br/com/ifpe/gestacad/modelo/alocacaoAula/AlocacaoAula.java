@@ -1,14 +1,19 @@
 package br.com.ifpe.gestacad.modelo.alocacaoAula;
 
+import java.util.List;
+
 import org.hibernate.annotations.SQLRestriction;
 
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
+import br.com.ifpe.gestacad.modelo.horario.Horario;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,5 +43,8 @@ public class AlocacaoAula extends EntidadeAuditavel{
 
     @ManyToOne
     private Professor professor;
+
+    @OneToMany(mappedBy = "alocacaoAula", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Horario> horarios;
 
 }

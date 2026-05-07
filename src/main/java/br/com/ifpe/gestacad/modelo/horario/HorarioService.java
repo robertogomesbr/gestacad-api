@@ -34,6 +34,7 @@ public class HorarioService {
     public void update(Long id, Horario horarioAlterado) {
 
         Horario horario = repository.findById(id).get();
+        horario.setAlocacaoAula(horarioAlterado.getAlocacaoAula());
         horario.setHorario(horarioAlterado.getHorario());
         horario.setDiaSemana(horarioAlterado.getDiaSemana());
 

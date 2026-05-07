@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/disciplina")
@@ -27,10 +27,14 @@ public class DisciplinaController {
     @Autowired
     private DisciplinaService disciplinaService;
 
+    @Autowired
+    private CursoService cursoService;
+
     @PostMapping
     public ResponseEntity<Disciplina> save(@RequestBody DisciplinaRequest request) {
 
         Disciplina disciplinaNovo = request.build();
+        disciplinaNovo.setCurso(cursoService.obterPorID(request.getIdCurso()));
         Disciplina disciplina = disciplinaService.save(disciplinaNovo);
 
         return new ResponseEntity<>(disciplina, HttpStatus.CREATED);
@@ -51,7 +55,8 @@ public class DisciplinaController {
     @PutMapping("/{id}")
     public ResponseEntity<Disciplina> update(@PathVariable("id") Long id, @RequestBody DisciplinaRequest request) {
 
-        Disciplina disciplina = request.build();;
+        Disciplina disciplina = request.build();
+        disciplina.setCurso(cursoService.obterPorID(request.getIdCurso()));
         disciplinaService.update(id, disciplina);
 
         return ResponseEntity.ok().build();

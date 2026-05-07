@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
 import jakarta.validation.Valid;
@@ -27,10 +28,15 @@ public class TurmaController {
     @Autowired
     private TurmaService turmaService;
 
+    @Autowired CursoService cursoService;
+
     @PostMapping
     public ResponseEntity<Turma> save(@RequestBody @Valid TurmaRequest request) {
 
-        Turma turma = turmaService.save(request.build());
+        Turma turmaNova = request.build();
+        turmaNova.setCurso(cursoService.obterPorID(request.getIdCurso()));
+        Turma turma = turmaService.save(turmaNova);
+
         return new ResponseEntity<Turma>(turma, HttpStatus.CREATED);
     }
 
@@ -49,7 +55,10 @@ public class TurmaController {
     @PutMapping("/{id}")
     public ResponseEntity<Turma> update(@PathVariable("id") Long id, @RequestBody @Valid TurmaRequest request) {
 
-        turmaService.update(id, request.build());
+        Turma turma = request.build();
+        turma.setCurso(cursoService.obterPorID(request.getIdCurso()));
+        turmaService.update(id, turma);
+
         return ResponseEntity.ok().build();
     }
 

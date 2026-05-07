@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TurmaRequest {
 
+    private Long idCurso;
+
     private String nome;
 
     private String anoEntrada;

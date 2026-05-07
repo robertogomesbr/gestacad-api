@@ -3,12 +3,13 @@ package br.com.ifpe.gestacad.modelo.disciplina;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.com.ifpe.gestacad.modelo.curso.Curso;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,10 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class Disciplina extends EntidadeAuditavel {
+
+    @JsonIgnore
+    @ManyToOne
+    private Curso curso;
 
     @Column
     private String nome;
