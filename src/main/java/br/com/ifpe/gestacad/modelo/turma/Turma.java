@@ -2,8 +2,6 @@ package br.com.ifpe.gestacad.modelo.turma;
 
 import org.hibernate.annotations.SQLRestriction;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import br.com.ifpe.gestacad.modelo.curso.Curso;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
@@ -34,7 +32,7 @@ public class Turma extends EntidadeAuditavel {
     private String nome;
 
     @Column
-    private String anoEntrada;
+    private Integer anoEntrada;
 
     @Column
     private String semestreEntrada;
