@@ -46,7 +46,7 @@ public class AlocacaoAulaController {
     private ProfessorService professorService;
 
     @PostMapping
-    public ResponseEntity<AlocacaoAula> save(@RequestBody AlocacaoAulaRequest request) {
+    public ResponseEntity<AlocacaoAula> save(@RequestBody @Valid AlocacaoAulaRequest request) {
 
         AlocacaoAula alocacaoAulaNovo = request.build();
         alocacaoAulaNovo.setTurma(turmaService.obterPorID(request.getIdTurma()));
@@ -71,7 +71,7 @@ public class AlocacaoAulaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlocacaoAula> update(@PathVariable("id") Long id, @RequestBody AlocacaoAulaRequest request) {
+    public ResponseEntity<AlocacaoAula> update(@PathVariable("id") Long id, @RequestBody @Valid AlocacaoAulaRequest request) {
 
         AlocacaoAula alocacaoAula = request.build();
         alocacaoAula.setTurma(turmaService.obterPorID(request.getIdTurma()));
@@ -101,7 +101,7 @@ public class AlocacaoAulaController {
 
     @PutMapping("/horario/{horarioId}")
     public ResponseEntity<Horario> atualizarHorario(@PathVariable("horarioId") Long horarioId,
-            @RequestBody HorarioRequest request) {
+            @RequestBody @Valid HorarioRequest request) {
 
         Horario horario = alocacaoAulaService.atualizarHorario(horarioId, request.build());
 
