@@ -14,10 +14,13 @@ public class HorarioRequest {
     
     private String horario;
 
+    private String diaSemana;
+
     public Horario build() {
 
         return Horario.builder()
             .horario(horario)
+            .diaSemana(diaSemana)
             .build();
     }
 }

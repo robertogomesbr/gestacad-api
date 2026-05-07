@@ -1,14 +1,12 @@
-package br.com.ifpe.gestacad.modelo.reserva;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+package br.com.ifpe.gestacad.modelo.alocacaoAula;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
+import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -19,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Reserva")
+@Table(name = "AlocacaoAula")
 @SQLRestriction("habilitado = true")
 @Builder
 @Getter
@@ -27,24 +25,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Reserva extends EntidadeAuditavel{
+public class AlocacaoAula extends EntidadeAuditavel{
     
+    @ManyToOne
+    private Turma turma;
+
+    @ManyToOne
+    private Disciplina disciplina;
+
     @ManyToOne
     private Sala sala;
 
     @ManyToOne
     private Professor professor;
-
-    @Column
-    private LocalDate dataReserva;
-
-    @Column
-    private LocalTime horarioInicio;
-
-    @Column
-    private LocalTime horarioFim;
-
-    @Column
-    private Boolean statusReserva;
 
 }

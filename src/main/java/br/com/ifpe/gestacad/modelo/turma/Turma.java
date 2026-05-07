@@ -23,10 +23,22 @@ import lombok.Setter;
 
 public class Turma extends EntidadeAuditavel {
 
-    @Column(nullable = false)
-    private Integer periodo;
+    @Column
+    private String nome;
 
-    @Column(nullable = false, length = 100)
-    private String curso;
+    @Column
+    private String anoEntrada;
+
+    @Column
+    private String semestreEntrada;
+
+    @Column
+    private Integer qtdMaximaAlunos;
+
+    @Column
+    private Integer qtdAlunosMatriculados;
+    
+    @Column
+    private Boolean statusTurma;
 
 }

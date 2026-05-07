@@ -12,19 +12,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DisciplinaRequest {
 
-    private Long idProfessor;
-    private Long idTurma;
-    private Long idHorario;
     private String nome;
-    private String area;
-    private String turno;
+    private Integer chTotal;
+    private String periodoOfertado;
 
     public Disciplina build() {
 
         return Disciplina.builder()
             .nome(nome)
-            .area(area)
-            .turno(turno)
+            .chTotal(chTotal)
+            .periodoOfertado(periodoOfertado)
             .build();
     }
 }

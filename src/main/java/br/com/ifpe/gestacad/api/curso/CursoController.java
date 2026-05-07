@@ -1,4 +1,4 @@
-package br.com.ifpe.gestacad.api.disciplina;
+package br.com.ifpe.gestacad.api.curso;
 
 import java.util.List;
 
@@ -15,54 +15,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
-import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
+import br.com.ifpe.gestacad.modelo.curso.Curso;
+import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/disciplina")
+@RequestMapping("/api/curso")
 @CrossOrigin
-public class DisciplinaController {
-
+public class CursoController {
+    
     @Autowired
-    private DisciplinaService disciplinaService;
+    private CursoService cursoService;
 
     @PostMapping
-    public ResponseEntity<Disciplina> save(@RequestBody DisciplinaRequest request) {
+    public ResponseEntity<Curso> save(@RequestBody @Valid CursoRequest request) {
 
-        Disciplina disciplinaNovo = request.build();
-        Disciplina disciplina = disciplinaService.save(disciplinaNovo);
-
-        return new ResponseEntity<>(disciplina, HttpStatus.CREATED);
+        Curso curso = cursoService.save(request.build());
+        return new ResponseEntity<Curso>(curso, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<Disciplina> listarTodos() {
+    public List<Curso> listarTodos() {
 
-        return disciplinaService.listarTodos();
+        return cursoService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Disciplina obterPorID(@PathVariable Long id) {
+    public Curso obterPorID(@PathVariable Long id) {
 
-        return disciplinaService.obterPorID(id);
+        return cursoService.obterPorID(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Disciplina> update(@PathVariable("id") Long id, @RequestBody DisciplinaRequest request) {
+    public ResponseEntity<Curso> update(@PathVariable("id") Long id, @RequestBody @Valid CursoRequest request) {
 
-        Disciplina disciplina = request.build();;
-        disciplinaService.update(id, disciplina);
-
+        cursoService.update(id, request.build());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
-        disciplinaService.delete(id);
+        cursoService.delete(id);
         return ResponseEntity.ok().build();
     }
-
-
 }

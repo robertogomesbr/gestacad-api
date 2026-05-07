@@ -34,4 +34,7 @@ public class Horario extends EntidadeAuditavel {
     @Column
     private String horario;
 
+    @Column
+    private String diaSemana;
+
 }

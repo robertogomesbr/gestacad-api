@@ -1,14 +1,10 @@
-package br.com.ifpe.gestacad.modelo.disciplina;
-
+package br.com.ifpe.gestacad.modelo.curso;
 
 import org.hibernate.annotations.SQLRestriction;
 
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,23 +13,24 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Disciplina")
+@Table(name = "Curso")
 @SQLRestriction("habilitado = true")
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class Disciplina extends EntidadeAuditavel {
+public class Curso extends EntidadeAuditavel {
 
     @Column
     private String nome;
+    
+    @Column
+    private Integer qtdPeriodos;
 
     @Column
-    private Integer chTotal;
+    private String area;
 
     @Column
-    private String periodoOfertado;
-
+    private String turno;
 }
