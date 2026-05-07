@@ -31,10 +31,10 @@ public class Horario extends EntidadeAuditavel {
     @ManyToOne
     private AlocacaoAula alocacaoAula;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String horario;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String diaSemana;
 
 }

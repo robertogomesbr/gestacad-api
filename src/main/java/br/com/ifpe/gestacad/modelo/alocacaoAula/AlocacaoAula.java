@@ -48,7 +48,7 @@ public class AlocacaoAula extends EntidadeAuditavel{
     @OneToMany(mappedBy = "alocacaoAula", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Horario> horarios;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String semestreLetivo;
 
 }
