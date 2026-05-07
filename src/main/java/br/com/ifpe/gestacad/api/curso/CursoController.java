@@ -1,4 +1,4 @@
-package br.com.ifpe.gestacad.api.horario;
+package br.com.ifpe.gestacad.api.curso;
 
 import java.util.List;
 
@@ -15,48 +15,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.gestacad.modelo.horario.Horario;
-import br.com.ifpe.gestacad.modelo.horario.HorarioService;
+import br.com.ifpe.gestacad.modelo.curso.Curso;
+import br.com.ifpe.gestacad.modelo.curso.CursoService;
+import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/horario")
+@RequestMapping("/api/curso")
 @CrossOrigin
-public class HorarioController {
-
+public class CursoController {
+    
     @Autowired
-    private HorarioService horarioService;
+    private CursoService cursoService;
 
     @PostMapping
-    public ResponseEntity<Horario> save(@RequestBody HorarioRequest request) {
-        
-        Horario horario = horarioService.save(request.build());
-        return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
+    public ResponseEntity<Curso> save(@RequestBody @Valid CursoRequest request) {
+
+        Curso curso = cursoService.save(request.build());
+        return new ResponseEntity<Curso>(curso, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public List<Horario> listarTodos() {
+    public List<Curso> listarTodos() {
 
-        return horarioService.listarTodos();
+        return cursoService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public Horario obterPorID(@PathVariable Long id) {
-        
-        return horarioService.obterPorID(id);
+    public Curso obterPorID(@PathVariable Long id) {
+
+        return cursoService.obterPorID(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Horario> update(@PathVariable("id") Long id, @RequestBody HorarioRequest request) {
+    public ResponseEntity<Curso> update(@PathVariable("id") Long id, @RequestBody @Valid CursoRequest request) {
 
-        horarioService.update(id, request.build());
+        cursoService.update(id, request.build());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        
-        horarioService.delete(id);
+
+        cursoService.delete(id);
         return ResponseEntity.ok().build();
     }
-    
 }

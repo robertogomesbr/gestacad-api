@@ -34,8 +34,13 @@ public class TurmaService {
     public void update(Long id, Turma turmaAlterada) {
 
         Turma turma = repository.findById(id).get();
-        turma.setPeriodo(turmaAlterada.getPeriodo());
         turma.setCurso(turmaAlterada.getCurso());
+        turma.setNome(turmaAlterada.getNome());
+        turma.setAnoEntrada(turmaAlterada.getAnoEntrada());
+        turma.setSemestreEntrada(turmaAlterada.getSemestreEntrada());
+        turma.setQtdMaximaAlunos(turmaAlterada.getQtdMaximaAlunos());
+        turma.setQtdAlunosMatriculados(turmaAlterada.getQtdAlunosMatriculados());
+        turma.setStatusTurma(turmaAlterada.getStatusTurma());
 
         repository.save(turma);
     }

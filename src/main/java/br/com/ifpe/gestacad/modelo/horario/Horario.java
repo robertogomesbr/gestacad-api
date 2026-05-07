@@ -4,7 +4,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
+import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAula;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,9 +29,12 @@ public class Horario extends EntidadeAuditavel {
 
     @JsonIgnore
     @ManyToOne
-    private Disciplina disciplina;
+    private AlocacaoAula alocacaoAula;
 
     @Column
     private String horario;
+
+    @Column
+    private String diaSemana;
 
 }

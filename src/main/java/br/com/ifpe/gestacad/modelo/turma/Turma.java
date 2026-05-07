@@ -2,9 +2,11 @@ package br.com.ifpe.gestacad.modelo.turma;
 
 import org.hibernate.annotations.SQLRestriction;
 
+import br.com.ifpe.gestacad.modelo.curso.Curso;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,10 +25,25 @@ import lombok.Setter;
 
 public class Turma extends EntidadeAuditavel {
 
-    @Column(nullable = false)
-    private Integer periodo;
+    @ManyToOne
+    private Curso curso;
 
     @Column(nullable = false, length = 100)
-    private String curso;
+    private String nome;
+
+    @Column(nullable = false)
+    private Integer anoEntrada;
+
+    @Column(nullable = false, length = 50)
+    private String semestreEntrada;
+
+    @Column(nullable = false)
+    private Integer qtdMaximaAlunos;
+
+    @Column(nullable = false)
+    private Integer qtdAlunosMatriculados;
+    
+    @Column(nullable = false)
+    private Boolean statusTurma;
 
 }

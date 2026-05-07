@@ -15,13 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.ifpe.gestacad.api.horario.HorarioRequest;
+import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
-import br.com.ifpe.gestacad.modelo.horario.Horario;
-import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
-import br.com.ifpe.gestacad.modelo.turma.TurmaService;
-import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/disciplina")
@@ -32,17 +28,13 @@ public class DisciplinaController {
     private DisciplinaService disciplinaService;
 
     @Autowired
-    private ProfessorService professorService;
-
-    @Autowired
-    private TurmaService turmaService;
+    private CursoService cursoService;
 
     @PostMapping
     public ResponseEntity<Disciplina> save(@RequestBody DisciplinaRequest request) {
 
         Disciplina disciplinaNovo = request.build();
-        disciplinaNovo.setProfessor(professorService.obterPorID(request.getIdProfessor()));
-        disciplinaNovo.setTurma(turmaService.obterPorID(request.getIdTurma()));
+        disciplinaNovo.setCurso(cursoService.obterPorID(request.getIdCurso()));
         Disciplina disciplina = disciplinaService.save(disciplinaNovo);
 
         return new ResponseEntity<>(disciplina, HttpStatus.CREATED);
@@ -64,8 +56,7 @@ public class DisciplinaController {
     public ResponseEntity<Disciplina> update(@PathVariable("id") Long id, @RequestBody DisciplinaRequest request) {
 
         Disciplina disciplina = request.build();
-        disciplina.setProfessor(professorService.obterPorID(request.getIdProfessor()));
-        disciplina.setTurma(turmaService.obterPorID(request.getIdTurma()));
+        disciplina.setCurso(cursoService.obterPorID(request.getIdCurso()));
         disciplinaService.update(id, disciplina);
 
         return ResponseEntity.ok().build();
@@ -78,27 +69,5 @@ public class DisciplinaController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/horario/{disciplinaId}")
-    public ResponseEntity<Horario> adicionarHorario(@PathVariable("disciplinaId") Long disciplinaId,
-            @RequestBody @Valid HorarioRequest request) {
-
-        Horario horario = disciplinaService.adicionarHorario(disciplinaId, request.build());
-        return new ResponseEntity<>(horario, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/horario/{horarioId}")
-    public ResponseEntity<Horario> atualizarHorario(@PathVariable("horarioId") Long horarioId,
-            @RequestBody HorarioRequest request) {
-
-        Horario horario = disciplinaService.atualizarHorario(horarioId, request.build());
-        return new ResponseEntity<>(horario, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/horario/{horarioId}")
-    public ResponseEntity<Void> removerHorario(@PathVariable("horarioId") Long horarioId) {
-
-        disciplinaService.removerHorario(horarioId);
-        return ResponseEntity.noContent().build();
-    }
 
 }

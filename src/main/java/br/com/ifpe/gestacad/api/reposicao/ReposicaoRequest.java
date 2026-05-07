@@ -37,7 +37,7 @@ public class ReposicaoRequest {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioFim;
 
-    private Boolean statusReposicao;
+    private String statusReposicao;
 
     public Reposicao build() {
 

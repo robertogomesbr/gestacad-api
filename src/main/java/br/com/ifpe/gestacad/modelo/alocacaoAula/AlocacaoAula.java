@@ -1,18 +1,20 @@
-package br.com.ifpe.gestacad.modelo.reposicao;
+package br.com.ifpe.gestacad.modelo.alocacaoAula;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
+import br.com.ifpe.gestacad.modelo.horario.Horario;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.util.entity.EntidadeAuditavel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Reposicao")
+@Table(name = "AlocacaoAula")
 @SQLRestriction("habilitado = true")
 @Builder
 @Getter
@@ -29,33 +31,24 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class Reposicao extends EntidadeAuditavel {
+public class AlocacaoAula extends EntidadeAuditavel{
     
-    @ManyToOne
-    private Disciplina disciplina;
-
     @ManyToOne
     private Turma turma;
 
     @ManyToOne
-    private Professor professor;
-    
+    private Disciplina disciplina;
+
     @ManyToOne
     private Sala sala;
 
-    @Column
-    private LocalDate dataAulaOriginal;
+    @ManyToOne
+    private Professor professor;
+
+    @OneToMany(mappedBy = "alocacaoAula", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Horario> horarios;
 
     @Column
-    private LocalDate dataReposicao;
+    private String semestreLetivo;
 
-    @Column
-    private LocalTime horarioInicio;
-
-    @Column
-    private LocalTime horarioFim;
-
-    @Column
-    private String statusReposicao;
-    
 }
