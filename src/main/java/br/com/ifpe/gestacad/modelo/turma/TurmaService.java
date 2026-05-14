@@ -36,6 +36,7 @@ public class TurmaService {
         Turma turma = repository.findById(id).get();
         turma.setCurso(turmaAlterada.getCurso());
         turma.setNome(turmaAlterada.getNome());
+        turma.setTurno(turmaAlterada.getTurno());
         turma.setAnoEntrada(turmaAlterada.getAnoEntrada());
         turma.setSemestreEntrada(turmaAlterada.getSemestreEntrada());
         turma.setQtdMaximaAlunos(turmaAlterada.getQtdMaximaAlunos());

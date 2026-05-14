@@ -18,7 +18,7 @@ public class SalaRequest {
     
     @NotBlank(message = "O Blobo é de preenchimento obrigatório")
     @Length(max = 50, message = "O Bloco deverá ter no máximo {max} caracteres")
-    private String blocoSelecionado;
+    private String bloco;
 
     @NotNull(message = "O Número é de preenchimento obrigatório")
     private Integer numero;
@@ -30,7 +30,7 @@ public class SalaRequest {
     public Sala build() {
 
         return Sala.builder()
-            .blocoSelecionado(blocoSelecionado)
+            .bloco(bloco)
             .numero(numero)
             .tipo(tipo)
             .build();

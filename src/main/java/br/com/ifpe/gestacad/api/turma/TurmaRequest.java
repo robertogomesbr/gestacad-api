@@ -22,6 +22,10 @@ public class TurmaRequest {
     @Length(max = 100, message = "O Nome deverá ter no máximo {max} caracteres")
     private String nome;
 
+    @NotBlank(message = "O Turno é de preenchimento obrigatório")
+    @Length(max = 50, message = "O Turno deverá ter no máximo {max} caracteres")
+    private String turno;
+
     @NotNull(message = "O Ano de Entrada é de preenchimento obrigatório")
     private Integer anoEntrada;
 
@@ -42,6 +46,7 @@ public class TurmaRequest {
 
         return Turma.builder()
             .nome(nome)
+            .turno(turno)
             .anoEntrada(anoEntrada)
             .semestreEntrada(semestreEntrada)
             .qtdMaximaAlunos(qtdMaximaAlunos)

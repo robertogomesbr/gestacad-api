@@ -34,7 +34,7 @@ public class SalaService {
     public void update(Long id, Sala salaAlterada) {
 
         Sala sala = repository.findById(id).get();
-        sala.setBlocoSelecionado(salaAlterada.getBlocoSelecionado());
+        sala.setBloco(salaAlterada.getBloco());
         sala.setNumero(salaAlterada.getNumero());
         sala.setTipo(salaAlterada.getTipo());
 

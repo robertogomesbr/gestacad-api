@@ -1,5 +1,7 @@
 package br.com.ifpe.gestacad.modelo.horario;
 
+import java.time.LocalTime;
+
 import org.hibernate.annotations.SQLRestriction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,8 +33,11 @@ public class Horario extends EntidadeAuditavel {
     @ManyToOne
     private AlocacaoAula alocacaoAula;
 
-    @Column(nullable = false, length = 50)
-    private String horario;
+    @Column(nullable = false)
+    private LocalTime horarioInicio;
+
+    @Column(nullable = false)
+    private LocalTime horarioFim;
 
     @Column(nullable = false, length = 50)
     private String diaSemana;

@@ -20,6 +20,7 @@ import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAula;
 import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAulaService;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
 import br.com.ifpe.gestacad.modelo.horario.Horario;
+import br.com.ifpe.gestacad.modelo.horario.HorarioService;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
@@ -44,6 +45,9 @@ public class AlocacaoAulaController {
 
     @Autowired
     private ProfessorService professorService;
+
+    @Autowired
+    private HorarioService horarioService;
 
     @PostMapping
     public ResponseEntity<AlocacaoAula> save(@RequestBody @Valid AlocacaoAulaRequest request) {
@@ -71,7 +75,8 @@ public class AlocacaoAulaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlocacaoAula> update(@PathVariable("id") Long id, @RequestBody @Valid AlocacaoAulaRequest request) {
+    public ResponseEntity<AlocacaoAula> update(@PathVariable("id") Long id,
+            @RequestBody @Valid AlocacaoAulaRequest request) {
 
         AlocacaoAula alocacaoAula = request.build();
         alocacaoAula.setTurma(turmaService.obterPorID(request.getIdTurma()));
@@ -91,21 +96,39 @@ public class AlocacaoAulaController {
     }
 
     @PostMapping("/horario/{alocacaoAulaId}")
-    public ResponseEntity<Horario> adicionarHorario(@PathVariable("alocacaoAulaId") Long alocacaoAulaId,
+    public ResponseEntity<Horario> adicionarHorario(
+            @PathVariable Long alocacaoAulaId,
             @RequestBody @Valid HorarioRequest request) {
 
-        Horario horarioAula = alocacaoAulaService.adicionarHorario(alocacaoAulaId, request.build());
+        AlocacaoAula alocacaoAula = alocacaoAulaService.obterPorID(alocacaoAulaId);
 
-        return new ResponseEntity<Horario>(horarioAula, HttpStatus.CREATED);
+        Horario horario = request.build();
+        horario.setAlocacaoAula(alocacaoAula);
+
+        Horario horarioAula = alocacaoAulaService.adicionarHorario(alocacaoAulaId, horario);
+
+        return new ResponseEntity<>(horarioAula, HttpStatus.CREATED);
     }
 
     @PutMapping("/horario/{horarioId}")
-    public ResponseEntity<Horario> atualizarHorario(@PathVariable("horarioId") Long horarioId,
+    public ResponseEntity<Horario> atualizarHorario(
+            @PathVariable Long horarioId,
             @RequestBody @Valid HorarioRequest request) {
 
-        Horario horario = alocacaoAulaService.atualizarHorario(horarioId, request.build());
+        Horario horario = horarioService.obterPorID(horarioId);
 
-        return new ResponseEntity<Horario>(horario, HttpStatus.OK);
+        horario.setHorarioInicio(request.getHorarioInicio());
+        horario.setHorarioFim(request.getHorarioFim());
+        horario.setDiaSemana(request.getDiaSemana());
+
+        if (request.getIdAlocacaoAula() != null) {
+            AlocacaoAula alocacao = alocacaoAulaService.obterPorID(request.getIdAlocacaoAula());
+            horario.setAlocacaoAula(alocacao);
+        }
+
+        horarioService.update(horarioId, horario);
+
+        return ResponseEntity.ok(horario);
     }
 
     @DeleteMapping("/horario/{horarioId}")
