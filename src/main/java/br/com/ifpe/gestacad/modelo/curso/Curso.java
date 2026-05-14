@@ -39,6 +39,4 @@ public class Curso extends EntidadeAuditavel {
     @Column
     private String area;
 
-    @Column
-    private String turno;
 }

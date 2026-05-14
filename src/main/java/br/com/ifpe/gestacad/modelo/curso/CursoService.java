@@ -37,7 +37,6 @@ public class CursoService {
         curso.setNome(cursoAlterada.getNome());
         curso.setQtdPeriodos(cursoAlterada.getQtdPeriodos());
         curso.setArea(cursoAlterada.getArea());
-        curso.setTurno(cursoAlterada.getTurno());
 
         repository.save(curso);
     }

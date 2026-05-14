@@ -24,7 +24,7 @@ import lombok.Setter;
 public class Sala extends EntidadeAuditavel{
     
     @Column(nullable = false, length = 50)
-    private String blocoSelecionado;
+    private String bloco;
 
     @Column(nullable = false)
     private Integer numero;

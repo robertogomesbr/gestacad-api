@@ -20,15 +20,12 @@ public class CursoRequest {
 
     private String area;
 
-    private String turno;
-
     public Curso build() {
 
         return Curso.builder()
             .nome(nome)
             .qtdPeriodos(qtdPeriodos)
             .area(area)
-            .turno(turno)
             .build();
     }
 

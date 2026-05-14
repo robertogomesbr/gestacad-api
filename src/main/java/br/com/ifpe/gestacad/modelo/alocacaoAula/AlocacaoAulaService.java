@@ -88,7 +88,8 @@ public class AlocacaoAulaService {
     public Horario atualizarHorario(Long id, Horario horarioAlterado) {
 
         Horario horario = horarioRepository.findById(id).get();
-        horario.setHorario(horarioAlterado.getHorario());
+        horario.setHorarioInicio(horarioAlterado.getHorarioInicio());
+        horario.setHorarioFim(horarioAlterado.getHorarioFim());
         horario.setDiaSemana(horarioAlterado.getDiaSemana());
 
         return horarioRepository.save(horario);

@@ -31,6 +31,9 @@ public class Turma extends EntidadeAuditavel {
     @Column(nullable = false, length = 100)
     private String nome;
 
+    @Column(nullable = false, length = 50)
+    private String turno;
+
     @Column(nullable = false)
     private Integer anoEntrada;
 
