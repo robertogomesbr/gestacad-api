@@ -2,6 +2,8 @@ package br.com.ifpe.gestacad.modelo.alocacaoAula;
 
 import java.util.List;
 
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLRestriction;
 
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
@@ -46,6 +48,7 @@ public class AlocacaoAula extends EntidadeAuditavel{
     private Professor professor;
 
     @OneToMany(mappedBy = "alocacaoAula", orphanRemoval = true, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SUBSELECT)
     private List<Horario> horarios;
 
     @Column(nullable = false, length = 50)

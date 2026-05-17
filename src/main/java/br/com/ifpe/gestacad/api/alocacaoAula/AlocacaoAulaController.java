@@ -20,7 +20,6 @@ import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAula;
 import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAulaService;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
 import br.com.ifpe.gestacad.modelo.horario.Horario;
-import br.com.ifpe.gestacad.modelo.horario.HorarioService;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
@@ -45,9 +44,6 @@ public class AlocacaoAulaController {
 
     @Autowired
     private ProfessorService professorService;
-
-    @Autowired
-    private HorarioService horarioService;
 
     @PostMapping
     public ResponseEntity<AlocacaoAula> save(@RequestBody @Valid AlocacaoAulaRequest request) {
@@ -100,14 +96,9 @@ public class AlocacaoAulaController {
             @PathVariable Long alocacaoAulaId,
             @RequestBody @Valid HorarioRequest request) {
 
-        AlocacaoAula alocacaoAula = alocacaoAulaService.obterPorID(alocacaoAulaId);
+        Horario horario = alocacaoAulaService.adicionarHorario(alocacaoAulaId, request.build());
 
-        Horario horario = request.build();
-        horario.setAlocacaoAula(alocacaoAula);
-
-        Horario horarioAula = alocacaoAulaService.adicionarHorario(alocacaoAulaId, horario);
-
-        return new ResponseEntity<>(horarioAula, HttpStatus.CREATED);
+        return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
     }
 
     @PutMapping("/horario/{horarioId}")
@@ -115,20 +106,15 @@ public class AlocacaoAulaController {
             @PathVariable Long horarioId,
             @RequestBody @Valid HorarioRequest request) {
 
-        Horario horario = horarioService.obterPorID(horarioId);
-
-        horario.setHorarioInicio(request.getHorarioInicio());
-        horario.setHorarioFim(request.getHorarioFim());
-        horario.setDiaSemana(request.getDiaSemana());
+        Horario horario = request.build();
 
         if (request.getIdAlocacaoAula() != null) {
-            AlocacaoAula alocacao = alocacaoAulaService.obterPorID(request.getIdAlocacaoAula());
-            horario.setAlocacaoAula(alocacao);
+            horario.setAlocacaoAula(alocacaoAulaService.obterPorID(request.getIdAlocacaoAula()));
         }
 
-        horarioService.update(horarioId, horario);
+        horario = alocacaoAulaService.atualizarHorario(horarioId, horario);
 
-        return ResponseEntity.ok(horario);
+        return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/horario/{horarioId}")

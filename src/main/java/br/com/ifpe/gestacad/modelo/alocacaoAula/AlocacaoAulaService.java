@@ -92,6 +92,10 @@ public class AlocacaoAulaService {
         horario.setHorarioFim(horarioAlterado.getHorarioFim());
         horario.setDiaSemana(horarioAlterado.getDiaSemana());
 
+        if (horarioAlterado.getAlocacaoAula() != null) {
+            horario.setAlocacaoAula(horarioAlterado.getAlocacaoAula());
+        }
+
         return horarioRepository.save(horario);
     }
 
