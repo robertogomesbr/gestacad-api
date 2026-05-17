@@ -23,7 +23,6 @@ public class EntidadeAuditavel extends EntidadeNegocio {
     
     @JsonIgnore
     @Version
-
     private Long versao;
 
     @JsonIgnore
@@ -32,7 +31,7 @@ public class EntidadeAuditavel extends EntidadeNegocio {
 
     @JsonIgnore
     @LastModifiedDate
-    private LocalDate dataUltimaModificao;
+    private LocalDate dataUltimaModificacao;
 
     @JsonIgnore
     @Column
@@ -40,5 +39,5 @@ public class EntidadeAuditavel extends EntidadeNegocio {
 
     @JsonIgnore
     @Column
-    private Long ultimaModificaoPor;
+    private Long ultimaModificacaoPor;
 }
