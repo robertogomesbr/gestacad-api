@@ -23,21 +23,21 @@ import lombok.Setter;
 
 public class Professor extends EntidadeAuditavel {
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column
+    @Column(nullable = false, unique = true, length = 14)
     private String cpf;
 
-    @Column
+    @Column(nullable = false)
     private String senha;
 
-    @Column
+    @Column(nullable = false, unique = true, length = 8)
     private String siape;
 
-    @Column
+    @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private boolean ativo;
 }
