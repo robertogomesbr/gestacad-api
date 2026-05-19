@@ -5,6 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.gestacad.modelo.acesso.Perfil;
+import br.com.ifpe.gestacad.modelo.acesso.PerfilRepository;
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
+import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -13,11 +17,34 @@ public class ProfessorService {
     @Autowired
     private ProfessorRepository repository;
 
+    @Autowired
+   private UsuarioService usuarioService;
+
+   @Autowired
+   private PerfilRepository perfilUsuarioRepository;
+
+
+    @Autowired
+    private EmailService emailService;
+
+
     @Transactional
     public Professor save(Professor professor) {
 
+        usuarioService.save(professor.getUsuario());
+
+        for (Perfil perfil : professor.getUsuario().getRoles()) {
+           perfil.setHabilitado(Boolean.TRUE);
+           perfilUsuarioRepository.save(perfil);
+      }
+
+
         professor.setHabilitado(Boolean.TRUE);
-        return repository.save(professor);
+        Professor professorSalvo = repository.save(professor);
+        
+        emailService.enviarEmailConfirmacaoCadastroProfessor(professorSalvo);
+
+        return professorSalvo;
     }
 
     public List<Professor> listarTodos() {

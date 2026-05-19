@@ -1,8 +1,12 @@
 package br.com.ifpe.gestacad.api.professor;
 
+import java.util.Arrays;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 
+import br.com.ifpe.gestacad.modelo.acesso.Perfil;
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -19,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProfessorRequest {
 
-    @NotBlank(message ="O Nome é de preenchimento obrigatório")
+    @NotBlank(message = "O Nome é de preenchimento obrigatório")
     @Length(max = 50, message = "O Nome deverá ter no máximo {max} caracteres")
     private String nome;
 
@@ -41,15 +45,24 @@ public class ProfessorRequest {
     @NotNull(message = "O status ativo é obrigatório")
     private Boolean ativo;
 
+    public Usuario buildUsuario() {
+        return Usuario.builder()
+                .username(email)
+                .password(senha)
+                .roles(Arrays.asList(new Perfil(Perfil.ROLE_CLIENTE)))
+                .build();
+    }
+
     public Professor build() {
 
         return Professor.builder()
-            .nome(nome)
-            .cpf(cpf)
-            .senha(senha)
-            .siape(siape)
-            .email(email)
-            .ativo(ativo)
-            .build();
+                .usuario(buildUsuario())
+                .nome(nome)
+                .cpf(cpf)
+                .senha(senha)
+                .siape(siape)
+                .email(email)
+                .ativo(ativo)
+                .build();
     }
 }
