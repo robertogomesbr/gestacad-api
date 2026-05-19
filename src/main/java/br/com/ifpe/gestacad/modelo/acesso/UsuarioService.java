@@ -1,6 +1,7 @@
 package br.com.ifpe.gestacad.modelo.acesso;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,20 +15,19 @@ import jakarta.transaction.Transactional;
 @Service
 public class UsuarioService implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository repository;
-
+    private final UsuarioRepository repository;
     private final PasswordEncoder passwordEncoder;
-
     private final AuthenticationManager authenticationManager;
 
-    public UsuarioService(UsuarioRepository userRepository, AuthenticationManager authenticationManager,
+    public UsuarioService(UsuarioRepository userRepository,
+            @Lazy AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder) {
 
         this.authenticationManager = authenticationManager;
         this.repository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     public Usuario authenticate(String username, String password) {
 
         authenticationManager.authenticate(

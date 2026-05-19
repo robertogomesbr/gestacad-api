@@ -32,7 +32,7 @@ public class ProfessorRequest {
     private String cpf;
 
     @NotBlank(message = "A senha é de preenchimento obrigatório")
-    private String senha;
+    private String password;
 
     @NotBlank(message = "O SIAPE é de preenchimento obrigatório")
     @Size(min = 8, max = 8, message = "O SIAPE deve possuir 8 caracteres")
@@ -48,8 +48,8 @@ public class ProfessorRequest {
     public Usuario buildUsuario() {
         return Usuario.builder()
                 .username(email)
-                .password(senha)
-                .roles(Arrays.asList(new Perfil(Perfil.ROLE_CLIENTE)))
+                .password(password)
+                .roles(Arrays.asList(new Perfil(Perfil.ROLE_PROFESSOR)))
                 .build();
     }
 
@@ -59,7 +59,6 @@ public class ProfessorRequest {
                 .usuario(buildUsuario())
                 .nome(nome)
                 .cpf(cpf)
-                .senha(senha)
                 .siape(siape)
                 .email(email)
                 .ativo(ativo)

@@ -36,9 +36,6 @@ public class Professor extends EntidadeAuditavel {
     @Column(nullable = false, unique = true, length = 14)
     private String cpf;
 
-    @Column(nullable = false)
-    private String senha;
-
     @Column(nullable = false, unique = true, length = 8)
     private String siape;
 

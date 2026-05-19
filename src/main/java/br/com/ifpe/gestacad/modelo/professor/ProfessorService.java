@@ -63,7 +63,6 @@ public class ProfessorService {
         Professor professor = repository.findById(id).get();
         professor.setNome(professorAlterado.getNome());
         professor.setCpf(professorAlterado.getCpf());
-        professor.setSenha(professorAlterado.getSenha());
         professor.setSiape(professorAlterado.getSiape());
         professor.setEmail(professorAlterado.getEmail());
         professor.setAtivo(professorAlterado.isAtivo());

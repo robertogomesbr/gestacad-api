@@ -25,7 +25,6 @@ import jakarta.mail.internet.MimeMessage;
 @Component
 public class EmailService {
 
-
     @Value("${spring.mail.username}")
     String username;
 
@@ -81,8 +80,7 @@ public class EmailService {
 
         MimeMessage message = emailSender.createMimeMessage();
 
-       
- MimeMessageHelper helper = new MimeMessageHelper(message);
+        MimeMessageHelper helper = new MimeMessageHelper(message);
 
         try {
 
@@ -99,7 +97,7 @@ public class EmailService {
         emailSender.send(message);
     }
 
-   private JavaMailSender getJavaMailSender() {
+    private JavaMailSender getJavaMailSender() {
 
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
@@ -118,4 +116,3 @@ public class EmailService {
         return mailSender;
     }
 }
-
