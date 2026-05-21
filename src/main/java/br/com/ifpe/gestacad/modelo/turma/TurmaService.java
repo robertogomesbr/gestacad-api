@@ -17,6 +17,7 @@ public class TurmaService {
     public Turma save(Turma turma) {
 
         turma.setHabilitado(Boolean.TRUE);
+        turma.setStatusTurma(Boolean.TRUE);
         return repository.save(turma);
     }
 
