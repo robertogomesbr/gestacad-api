@@ -39,7 +39,6 @@ public class TurmaRequest {
     @NotNull(message = "O Qtd. de Alunos Matriculados é de preenchimento obrigatório")
     private Integer qtdAlunosMatriculados;
     
-    @NotNull(message = "O Status da Turma é de preenchimento obrigatório")
     private Boolean statusTurma;
 
     public Turma build() {

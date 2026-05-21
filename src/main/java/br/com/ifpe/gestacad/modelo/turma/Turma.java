@@ -46,7 +46,6 @@ public class Turma extends EntidadeAuditavel {
     @Column(nullable = false)
     private Integer qtdAlunosMatriculados;
     
-    @Column(nullable = false)
     private Boolean statusTurma;
 
 }
