@@ -44,4 +44,6 @@ public class Professor extends EntidadeAuditavel {
 
     @Column(nullable = false)
     private boolean ativo;
+
+    
 }
