@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/disciplina")
@@ -31,7 +32,7 @@ public class DisciplinaController {
     private CursoService cursoService;
 
     @PostMapping
-    public ResponseEntity<Disciplina> save(@RequestBody DisciplinaRequest request) {
+    public ResponseEntity<Disciplina> save(@RequestBody @Valid DisciplinaRequest request) {
 
         Disciplina disciplinaNovo = request.build();
         disciplinaNovo.setCurso(cursoService.obterPorID(request.getIdCurso()));

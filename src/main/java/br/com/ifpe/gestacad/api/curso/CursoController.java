@@ -31,7 +31,7 @@ public class CursoController {
     public ResponseEntity<Curso> save(@RequestBody @Valid CursoRequest request) {
 
         Curso curso = cursoService.save(request.build());
-        return new ResponseEntity<Curso>(curso, HttpStatus.CREATED);
+        return new ResponseEntity<>(curso, HttpStatus.CREATED);
     }
 
     @GetMapping

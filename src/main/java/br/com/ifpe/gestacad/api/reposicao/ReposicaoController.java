@@ -21,6 +21,7 @@ import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
 import br.com.ifpe.gestacad.modelo.reposicao.ReposicaoService;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/reposicao")
@@ -43,7 +44,7 @@ public class ReposicaoController {
     private SalaService salaService;
 
     @PostMapping
-    public ResponseEntity<Reposicao> save(@RequestBody ReposicaoRequest request) {
+    public ResponseEntity<Reposicao> save(@RequestBody @Valid ReposicaoRequest request) {
         
         Reposicao reposicaoNova = request.build();
         reposicaoNova.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/professor")
@@ -27,10 +28,10 @@ public class ProfessorController {
     private ProfessorService professorService;
 
     @PostMapping
-    public ResponseEntity<Professor> save(@RequestBody ProfessorRequest request) {
+    public ResponseEntity<Professor> save(@RequestBody  @Valid ProfessorRequest request) {
 
         Professor professor = professorService.save(request.build());
-        return new ResponseEntity<Professor>(professor, HttpStatus.CREATED);
+        return new ResponseEntity<>(professor, HttpStatus.CREATED);
     }
 
     @GetMapping

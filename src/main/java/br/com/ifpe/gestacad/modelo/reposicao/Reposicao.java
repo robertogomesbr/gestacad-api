@@ -43,19 +43,19 @@ public class Reposicao extends EntidadeAuditavel {
     @ManyToOne
     private Sala sala;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate dataAulaOriginal;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate dataReposicao;
 
-    @Column
+    @Column(nullable = false)
     private LocalTime horarioInicio;
 
-    @Column
+    @Column(nullable = false)
     private LocalTime horarioFim;
 
-    @Column
+    @Column(nullable = false, length = 30)
     private String statusReposicao;
     
 }
