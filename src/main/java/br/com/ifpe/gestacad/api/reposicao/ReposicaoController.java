@@ -53,7 +53,7 @@ public class ReposicaoController {
         reposicaoNova.setSala(salaService.obterPorID(request.getIdSala()));
         Reposicao reposicao = reposicaoService.save(reposicaoNova);
 
-        return new ResponseEntity<Reposicao>(reposicao, HttpStatus.CREATED);
+        return new ResponseEntity<>(reposicao, HttpStatus.CREATED);
     }
 
     @GetMapping

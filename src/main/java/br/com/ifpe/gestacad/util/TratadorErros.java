@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class TratadorErros {
 
    @ExceptionHandler(Exception.class)
-   public ResponseEntity tratarErro500(Exception ex) {
+   public ResponseEntity<String> tratarErro500(Exception ex) {
 
        return ResponseEntity.internalServerError().body(ex.getMessage());
    }

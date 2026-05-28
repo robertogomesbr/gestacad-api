@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.ifpe.gestacad.modelo.acesso.Perfil;
 import br.com.ifpe.gestacad.modelo.acesso.PerfilRepository;
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import jakarta.transaction.Transactional;
@@ -29,7 +30,7 @@ public class ProfessorService {
 
 
     @Transactional
-    public Professor save(Professor professor) {
+    public Professor save(Professor professor, Usuario usuarioLogado) {
 
         usuarioService.save(professor.getUsuario());
 
@@ -40,6 +41,7 @@ public class ProfessorService {
 
 
         professor.setHabilitado(Boolean.TRUE);
+        professor.setCriadoPor(usuarioLogado);
         Professor professorSalvo = repository.save(professor);
         
         emailService.enviarEmailConfirmacaoCadastroProfessor(professorSalvo);
@@ -58,7 +60,7 @@ public class ProfessorService {
     }
 
     @Transactional
-    public void update(Long id, Professor professorAlterado) {
+    public void update(Long id, Professor professorAlterado, Usuario usuarioLogado) {
 
         Professor professor = repository.findById(id).get();
         professor.setNome(professorAlterado.getNome());
@@ -66,6 +68,9 @@ public class ProfessorService {
         professor.setSiape(professorAlterado.getSiape());
         professor.setEmail(professorAlterado.getEmail());
         professor.setAtivo(professorAlterado.isAtivo());
+
+        professor.setUltimaModificacaoPor(usuarioLogado);
+
 
         repository.save(professor);
     }

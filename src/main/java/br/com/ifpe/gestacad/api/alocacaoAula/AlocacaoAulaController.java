@@ -55,7 +55,7 @@ public class AlocacaoAulaController {
         alocacaoAulaNovo.setProfessor(professorService.obterPorID(request.getIdProfessor()));
         AlocacaoAula alocacaoAula = alocacaoAulaService.save(alocacaoAulaNovo);
 
-        return new ResponseEntity<AlocacaoAula>(alocacaoAula, HttpStatus.CREATED);
+        return new ResponseEntity<>(alocacaoAula, HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -98,7 +98,7 @@ public class AlocacaoAulaController {
 
         Horario horario = alocacaoAulaService.adicionarHorario(alocacaoAulaId, request.build());
 
-        return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
+        return new ResponseEntity<>(horario, HttpStatus.CREATED);
     }
 
     @PutMapping("/horario/{horarioId}")
@@ -114,7 +114,7 @@ public class AlocacaoAulaController {
 
         horario = alocacaoAulaService.atualizarHorario(horarioId, horario);
 
-        return new ResponseEntity<Horario>(horario, HttpStatus.CREATED);
+        return new ResponseEntity<>(horario, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/horario/{horarioId}")

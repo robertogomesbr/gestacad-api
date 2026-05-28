@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import br.com.ifpe.gestacad.modelo.acesso.Perfil;
 import br.com.ifpe.gestacad.modelo.segurança.JwtAuthenticationFilter;
 
 @Configuration
@@ -39,7 +40,17 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authorize -> authorize
 
                 .requestMatchers(HttpMethod.POST, "/api/professor").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/funcionario").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
+
+                .requestMatchers(HttpMethod.POST, "/api/curso").hasAnyAuthority(
+                    Perfil.ROLE_ADMIN)
+
+                .requestMatchers(HttpMethod.POST, "/api/alocacao-aula").hasAnyAuthority(
+                    Perfil.ROLE_PROFESSOR)
+
+                .requestMatchers(HttpMethod.POST, "/api/reposicao").hasAnyAuthority(
+                    Perfil.ROLE_PROFESSOR)
 
                 .requestMatchers(HttpMethod.GET, "/api-docs/*").permitAll()
                 .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()

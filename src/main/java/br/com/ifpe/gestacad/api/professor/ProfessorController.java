@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,10 +29,14 @@ public class ProfessorController {
     @Autowired
     private ProfessorService professorService;
 
-    @PostMapping
-    public ResponseEntity<Professor> save(@RequestBody  @Valid ProfessorRequest request) {
+    @Autowired
+    private UsuarioService usuarioService;
 
-        Professor professor = professorService.save(request.build());
+
+    @PostMapping
+    public ResponseEntity<Professor> save(@RequestBody  @Valid ProfessorRequest professorRequest, HttpServletRequest request) {
+
+        Professor professor = professorService.save(professorRequest.build(), usuarioService.obterUsuarioLogado(request));
         return new ResponseEntity<>(professor, HttpStatus.CREATED);
     }
 
@@ -47,9 +53,9 @@ public class ProfessorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Professor> update(@PathVariable("id") Long id, @RequestBody ProfessorRequest request) {
+    public ResponseEntity<Professor> update(@PathVariable("id") Long id, @RequestBody ProfessorRequest professorRequest, HttpServletRequest request) {
 
-        professorService.update(id, request.build());
+        professorService.update(id, professorRequest.build(), usuarioService.obterUsuarioLogado(request));
         return ResponseEntity.ok().build();
     }
 

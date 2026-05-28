@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.curso.Curso;
 import br.com.ifpe.gestacad.modelo.curso.CursoService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,10 +29,13 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
 
-    @PostMapping
-    public ResponseEntity<Curso> save(@RequestBody @Valid CursoRequest request) {
+    @Autowired
+    private UsuarioService usuarioService;
 
-        Curso curso = cursoService.save(request.build());
+    @PostMapping
+    public ResponseEntity<Curso> save(@RequestBody @Valid CursoRequest cursoRequest, HttpServletRequest request) {
+
+        Curso curso = cursoService.save(cursoRequest.build(), usuarioService.obterUsuarioLogado(request));
         return new ResponseEntity<>(curso, HttpStatus.CREATED);
     }
 

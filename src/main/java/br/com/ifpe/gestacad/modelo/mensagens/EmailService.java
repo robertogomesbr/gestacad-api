@@ -47,7 +47,7 @@ public class EmailService {
 
     public void enviarEmailConfirmacaoCadastroProfessor(Professor professor) {
 
-        String assuntoEmail = "Bem vindo ao nosso aplicativo";
+        String assuntoEmail = "Bem vindo a nossa plataforma!";
 
         Context params = new Context();
         params.setVariable("professor", professor);
