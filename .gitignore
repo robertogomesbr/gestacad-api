@@ -34,3 +34,5 @@ build/
 
 #postgres-data#
 postgres-data/
+
+.env
