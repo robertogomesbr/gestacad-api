@@ -23,62 +23,86 @@ import br.com.ifpe.gestacad.modelo.segurança.JwtAuthenticationFilter;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    private final AuthenticationProvider authenticationProvider;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final AuthenticationProvider authenticationProvider;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter, AuthenticationProvider authenticationProvider) {
-        this.authenticationProvider = authenticationProvider;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-    }
+        public SecurityConfiguration(JwtAuthenticationFilter jwtAuthenticationFilter,
+                        AuthenticationProvider authenticationProvider) {
+                this.authenticationProvider = authenticationProvider;
+                this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .csrf(c -> c.disable())
-            .authorizeHttpRequests(authorize -> authorize
+                http
+                                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                .csrf(c -> c.disable())
+                                .authorizeHttpRequests(authorize -> authorize
 
-                .requestMatchers(HttpMethod.POST, "/api/professor").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/funcionario").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
+                                                // EndPoints Públicos
+                                                .requestMatchers(HttpMethod.POST, "/api/professor").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
 
-                .requestMatchers(HttpMethod.POST, "/api/curso").hasAnyAuthority(
-                    Perfil.ROLE_ADMIN)
+                                                // Curso, Turma, Disciplina, Sala — apenas Admin
+                                                .requestMatchers(HttpMethod.POST, "/api/curso", "/api/turma",
+                                                                "/api/disciplina", "/api/sala")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN)
+                                                .requestMatchers(HttpMethod.PUT, "/api/curso/**", "/api/turma/**",
+                                                                "/api/disciplina/**", "/api/sala/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN)
+                                                .requestMatchers(HttpMethod.DELETE, "/api/curso/**", "/api/turma/**",
+                                                                "/api/disciplina/**", "/api/sala/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN)
+                                                .requestMatchers(HttpMethod.GET, "/api/curso/**", "/api/turma/**",
+                                                                "/api/disciplina/**", "/api/sala/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
 
-                .requestMatchers(HttpMethod.POST, "/api/alocacao-aula").hasAnyAuthority(
-                    Perfil.ROLE_PROFESSOR)
+                                                // Alocação de Aula — Admin gerencia, Professor consulta
+                                                .requestMatchers(HttpMethod.POST, "/api/alocacao-aula")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN)
+                                                .requestMatchers(HttpMethod.PUT, "/api/alocacao-aula/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN)
+                                                .requestMatchers(HttpMethod.DELETE, "/api/alocacao-aula/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN)
+                                                .requestMatchers(HttpMethod.GET, "/api/alocacao-aula/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
 
-                .requestMatchers(HttpMethod.POST, "/api/reposicao").hasAnyAuthority(
-                    Perfil.ROLE_PROFESSOR)
+                                                // Reposição de Aula — Professor e Admin
+                                                .requestMatchers(HttpMethod.POST, "/api/reposicao")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
+                                                .requestMatchers(HttpMethod.GET, "/api/reposicao/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
+                                                .requestMatchers(HttpMethod.PUT, "/api/reposicao/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
+                                                .requestMatchers(HttpMethod.DELETE, "/api/reposicao/**")
+                                                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
 
-                .requestMatchers(HttpMethod.GET, "/api-docs/*").permitAll()
-                .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/api-docs/*").permitAll()
+                                                .requestMatchers(HttpMethod.GET, "/swagger-ui/*").permitAll()
 
-                .anyRequest().authenticated()
+                                                .anyRequest().authenticated()
 
-            )
-            .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )            
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                                )
+                                .sessionManagement((session) -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .authenticationProvider(authenticationProvider)
+                                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    public CorsConfigurationSource corsConfigurationSource() {
+        public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration = new CorsConfiguration();
+                CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
-    
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);    
-        return source;
-    }
+                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+                configuration.setAllowCredentials(true);
+
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
+        }
 }
-
