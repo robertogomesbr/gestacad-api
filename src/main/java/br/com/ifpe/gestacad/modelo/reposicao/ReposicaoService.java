@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
+import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -14,11 +15,17 @@ public class ReposicaoService {
     @Autowired
     private ReposicaoRepository repository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
     public Reposicao save(Reposicao reposicao, Usuario usuarioLogado) {
 
         reposicao.setHabilitado(Boolean.TRUE);
         reposicao.setCriadoPor(usuarioLogado);
+
+        emailService.enviarEmailReposicao(reposicao);
+
         return repository.save(reposicao);
     }
 
