@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -33,14 +35,17 @@ public class SalaController {
     @Autowired
     private SalaService salaService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Operation(
             summary = "Serviço responsável pela criação de uma sala no sistema.",
             description = "Exemplo de um endpoint responsável pela criação de uma sala no sistema"
     )
     @PostMapping
-    public ResponseEntity<Sala> save(@RequestBody @Valid SalaRequest request) {
+    public ResponseEntity<Sala> save(@RequestBody @Valid SalaRequest salaRequest, HttpServletRequest request) {
 
-        Sala sala = salaService.save(request.build());
+        Sala sala = salaService.save(salaRequest.build(), usuarioService.obterUsuarioLogado(request));
         return new ResponseEntity<>(sala, HttpStatus.CREATED);
     }
 
@@ -69,9 +74,9 @@ public class SalaController {
             description = "Exemplo de um endpoint responsável por atualizar uma sala do sistema a partir do ID."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Sala> update(@PathVariable("id") Long id, @RequestBody @Valid SalaRequest request) {
+    public ResponseEntity<Sala> update(@PathVariable("id") Long id, @RequestBody @Valid SalaRequest salaRequest, HttpServletRequest request) {
 
-        salaService.update(id, request.build());
+        salaService.update(id, salaRequest.build(), usuarioService.obterUsuarioLogado(request));
         return ResponseEntity.ok().build();
     }
 

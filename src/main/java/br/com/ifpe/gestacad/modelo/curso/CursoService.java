@@ -34,12 +34,13 @@ public class CursoService {
     }
 
     @Transactional
-    public void update(Long id, Curso cursoAlterada) {
+    public void update(Long id, Curso cursoAlterada, Usuario usuarioLogado) {
 
         Curso curso = repository.findById(id).get();
         curso.setNome(cursoAlterada.getNome());
         curso.setQtdPeriodos(cursoAlterada.getQtdPeriodos());
         curso.setArea(cursoAlterada.getArea());
+        curso.setUltimaModificacaoPor(usuarioLogado);
 
         repository.save(curso);
     }

@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import br.com.ifpe.gestacad.modelo.disciplina.Disciplina;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -29,16 +31,19 @@ public class DisciplinaController {
     @Autowired
     private CursoService cursoService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Operation(
             summary = "Serviço responsável pela criação de uma disciplina no sistema.",
             description = "Endpoint responsável por cadastrar uma nova disciplina associada a um curso."
     )
     @PostMapping
-    public ResponseEntity<Disciplina> save(@RequestBody @Valid DisciplinaRequest request) {
+    public ResponseEntity<Disciplina> save(@RequestBody @Valid DisciplinaRequest disciplinaRequest, HttpServletRequest request) {
 
-        Disciplina disciplinaNovo = request.build();
-        disciplinaNovo.setCurso(cursoService.obterPorID(request.getIdCurso()));
-        Disciplina disciplina = disciplinaService.save(disciplinaNovo);
+        Disciplina disciplinaNovo = disciplinaRequest.build();
+        disciplinaNovo.setCurso(cursoService.obterPorID(disciplinaRequest.getIdCurso()));
+        Disciplina disciplina = disciplinaService.save(disciplinaNovo, usuarioService.obterUsuarioLogado(request));
 
         return new ResponseEntity<>(disciplina, HttpStatus.CREATED);
     }
@@ -70,11 +75,11 @@ public class DisciplinaController {
     @PutMapping("/{id}")
     public ResponseEntity<Disciplina> update(
             @PathVariable("id") Long id,
-            @RequestBody DisciplinaRequest request) {
+            @RequestBody DisciplinaRequest disciplinaRequest, HttpServletRequest request) {
 
-        Disciplina disciplina = request.build();
-        disciplina.setCurso(cursoService.obterPorID(request.getIdCurso()));
-        disciplinaService.update(id, disciplina);
+        Disciplina disciplina = disciplinaRequest.build();
+        disciplina.setCurso(cursoService.obterPorID(disciplinaRequest.getIdCurso()));
+        disciplinaService.update(id, disciplina, usuarioService.obterUsuarioLogado(request));
 
         return ResponseEntity.ok().build();
     }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.api.horario.HorarioRequest;
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAula;
 import br.com.ifpe.gestacad.modelo.alocacaoAula.AlocacaoAulaService;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
@@ -23,6 +24,7 @@ import br.com.ifpe.gestacad.modelo.horario.Horario;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,20 +54,23 @@ public class AlocacaoAulaController {
     @Autowired
     private ProfessorService professorService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Operation(
             summary = "Serviço responsável pela criação de uma alocação de aula.",
             description = "Endpoint responsável por cadastrar uma nova alocação de aula associando turma, disciplina, sala e professor."
     )
     @PostMapping
-    public ResponseEntity<AlocacaoAula> save(@RequestBody @Valid AlocacaoAulaRequest request) {
+    public ResponseEntity<AlocacaoAula> save(@RequestBody @Valid AlocacaoAulaRequest alocacaoAulaRequest, HttpServletRequest request) {
 
-        AlocacaoAula alocacaoAulaNovo = request.build();
-        alocacaoAulaNovo.setTurma(turmaService.obterPorID(request.getIdTurma()));
-        alocacaoAulaNovo.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));
-        alocacaoAulaNovo.setSala(salaService.obterPorID(request.getIdSala()));
-        alocacaoAulaNovo.setProfessor(professorService.obterPorID(request.getIdProfessor()));
+        AlocacaoAula alocacaoAulaNovo = alocacaoAulaRequest.build();
+        alocacaoAulaNovo.setTurma(turmaService.obterPorID(alocacaoAulaRequest.getIdTurma()));
+        alocacaoAulaNovo.setDisciplina(disciplinaService.obterPorID(alocacaoAulaRequest.getIdDisciplina()));
+        alocacaoAulaNovo.setSala(salaService.obterPorID(alocacaoAulaRequest.getIdSala()));
+        alocacaoAulaNovo.setProfessor(professorService.obterPorID(alocacaoAulaRequest.getIdProfessor()));
 
-        AlocacaoAula alocacaoAula = alocacaoAulaService.save(alocacaoAulaNovo);
+        AlocacaoAula alocacaoAula = alocacaoAulaService.save(alocacaoAulaNovo, usuarioService.obterUsuarioLogado(request));
 
         return new ResponseEntity<>(alocacaoAula, HttpStatus.CREATED);
     }
@@ -97,15 +102,15 @@ public class AlocacaoAulaController {
     @PutMapping("/{id}")
     public ResponseEntity<AlocacaoAula> update(
             @PathVariable("id") Long id,
-            @RequestBody @Valid AlocacaoAulaRequest request) {
+            @RequestBody @Valid AlocacaoAulaRequest alocacaoAularequest, HttpServletRequest request) {
 
-        AlocacaoAula alocacaoAula = request.build();
-        alocacaoAula.setTurma(turmaService.obterPorID(request.getIdTurma()));
-        alocacaoAula.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));
-        alocacaoAula.setSala(salaService.obterPorID(request.getIdSala()));
-        alocacaoAula.setProfessor(professorService.obterPorID(request.getIdProfessor()));
+        AlocacaoAula alocacaoAula = alocacaoAularequest.build();
+        alocacaoAula.setTurma(turmaService.obterPorID(alocacaoAularequest.getIdTurma()));
+        alocacaoAula.setDisciplina(disciplinaService.obterPorID(alocacaoAularequest.getIdDisciplina()));
+        alocacaoAula.setSala(salaService.obterPorID(alocacaoAularequest.getIdSala()));
+        alocacaoAula.setProfessor(professorService.obterPorID(alocacaoAularequest.getIdProfessor()));
 
-        alocacaoAulaService.update(id, alocacaoAula);
+        alocacaoAulaService.update(id, alocacaoAula, usuarioService.obterUsuarioLogado(request));
 
         return ResponseEntity.ok().build();
     }

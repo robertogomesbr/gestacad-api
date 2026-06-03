@@ -73,9 +73,9 @@ public class CursoController {
     @PutMapping("/{id}")
     public ResponseEntity<Curso> update(
             @PathVariable("id") Long id,
-            @RequestBody @Valid CursoRequest request) {
+            @RequestBody @Valid CursoRequest cursoRequest, HttpServletRequest request) {
 
-        cursoService.update(id, request.build());
+        cursoService.update(id, cursoRequest.build(), usuarioService.obterUsuarioLogado(request));
         return ResponseEntity.ok().build();
     }
 

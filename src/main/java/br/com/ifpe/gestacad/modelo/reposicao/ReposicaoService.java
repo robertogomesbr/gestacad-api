@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -14,9 +15,10 @@ public class ReposicaoService {
     private ReposicaoRepository repository;
 
     @Transactional
-    public Reposicao save(Reposicao reposicao) {
+    public Reposicao save(Reposicao reposicao, Usuario usuarioLogado) {
 
         reposicao.setHabilitado(Boolean.TRUE);
+        reposicao.setCriadoPor(usuarioLogado);
         return repository.save(reposicao);
     }
 
@@ -31,7 +33,7 @@ public class ReposicaoService {
     }
 
     @Transactional
-    public void update(Long id, Reposicao reposicaoAlterada) {
+    public void update(Long id, Reposicao reposicaoAlterada, Usuario usuarioLogado) {
 
         Reposicao reposicao = repository.findById(id).get();
         reposicao.setDisciplina(reposicaoAlterada.getDisciplina());
@@ -43,6 +45,8 @@ public class ReposicaoService {
         reposicao.setHorarioInicio(reposicaoAlterada.getHorarioInicio());
         reposicao.setHorarioFim(reposicaoAlterada.getHorarioFim());
         reposicao.setStatusReposicao(reposicaoAlterada.getStatusReposicao());
+
+        reposicao.setUltimaModificacaoPor(usuarioLogado);
 
         repository.save(reposicao);
     }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
@@ -23,6 +24,7 @@ import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -49,19 +51,22 @@ public class ReposicaoController {
     @Autowired
     private SalaService salaService;
 
+    @Autowired
+    private UsuarioService usuarioService;
+
     @Operation(
             summary = "Serviço responsável pela criação de uma reposição no sistema.",
             description = "Exemplo de um endpoint responsável pela criação de uma reposição no sistema"
     )
     @PostMapping
-    public ResponseEntity<Reposicao> save(@RequestBody @Valid ReposicaoRequest request) {
+    public ResponseEntity<Reposicao> save(@RequestBody @Valid ReposicaoRequest reposicaoRequest, HttpServletRequest request) {
 
-        Reposicao reposicaoNova = request.build();
-        reposicaoNova.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));
-        reposicaoNova.setTurma(turmaService.obterPorID(request.getIdTurma()));
-        reposicaoNova.setProfessor(professorService.obterPorID(request.getIdProfessor()));
-        reposicaoNova.setSala(salaService.obterPorID(request.getIdSala()));
-        Reposicao reposicao = reposicaoService.save(reposicaoNova);
+        Reposicao reposicaoNova = reposicaoRequest.build();
+        reposicaoNova.setDisciplina(disciplinaService.obterPorID(reposicaoRequest.getIdDisciplina()));
+        reposicaoNova.setTurma(turmaService.obterPorID(reposicaoRequest.getIdTurma()));
+        reposicaoNova.setProfessor(professorService.obterPorID(reposicaoRequest.getIdProfessor()));
+        reposicaoNova.setSala(salaService.obterPorID(reposicaoRequest.getIdSala()));
+        Reposicao reposicao = reposicaoService.save(reposicaoNova, usuarioService.obterUsuarioLogado(request));
 
         return new ResponseEntity<>(reposicao, HttpStatus.CREATED);
     }
@@ -91,14 +96,14 @@ public class ReposicaoController {
             description = "Exemplo de um endpoint responsável por atualizar a reposição do sistema a partir do seu ID."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<Reposicao> update(@PathVariable("id") Long id, @RequestBody ReposicaoRequest request) {
+    public ResponseEntity<Reposicao> update(@PathVariable("id") Long id, @RequestBody ReposicaoRequest reposicaoRequest, HttpServletRequest request) {
 
-        Reposicao reposicao = request.build();
-        reposicao.setDisciplina(disciplinaService.obterPorID(request.getIdDisciplina()));
-        reposicao.setTurma(turmaService.obterPorID(request.getIdTurma()));
-        reposicao.setProfessor(professorService.obterPorID(request.getIdProfessor()));
-        reposicao.setSala(salaService.obterPorID(request.getIdSala()));
-        reposicaoService.update(id, reposicao);
+        Reposicao reposicao = reposicaoRequest.build();
+        reposicao.setDisciplina(disciplinaService.obterPorID(reposicaoRequest.getIdDisciplina()));
+        reposicao.setTurma(turmaService.obterPorID(reposicaoRequest.getIdTurma()));
+        reposicao.setProfessor(professorService.obterPorID(reposicaoRequest.getIdProfessor()));
+        reposicao.setSala(salaService.obterPorID(reposicaoRequest.getIdSala()));
+        reposicaoService.update(id, reposicao, usuarioService.obterUsuarioLogado(request));
 
         return ResponseEntity.ok().build();
     }
