@@ -18,18 +18,29 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.gestacad.modelo.curso.CursoService;
 import br.com.ifpe.gestacad.modelo.turma.Turma;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/turma")
 @CrossOrigin
+@Tag(
+        name = "API Turma",
+        description = "API responsável pelos serviços de turma no sistema."
+)
 public class TurmaController {
 
     @Autowired
     private TurmaService turmaService;
 
-    @Autowired CursoService cursoService;
+    @Autowired
+    CursoService cursoService;
 
+    @Operation(
+            summary = "Serviço responsável pela criação de uma turma no sistema.",
+            description = "Exemplo de um endpoint responsável pela criação de uma turma no sistema"
+    )
     @PostMapping
     public ResponseEntity<Turma> save(@RequestBody @Valid TurmaRequest request) {
 
@@ -40,18 +51,30 @@ public class TurmaController {
         return new ResponseEntity<Turma>(turma, HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Serviço responsável por listas as turmas do sistema.",
+            description = "Exemplo de um endpoint responsável por listas as turmas do sistema"
+    )
     @GetMapping
     public List<Turma> listarTodos() {
 
         return turmaService.listarTodos();
     }
 
+    @Operation(
+            summary = "Serviço responsável por listas as turmas do sistema a partir do ID.",
+            description = "Exemplo de um endpoint responsável por listas as turmas do sistema a partir do ID."
+    )
     @GetMapping("/{id}")
     public Turma obterPorID(@PathVariable Long id) {
 
         return turmaService.obterPorID(id);
     }
 
+    @Operation(
+            summary = "Serviço responsável por atualizar a turma do sistema a partir do ID.",
+            description = "Exemplo de um endpoint responsável por atualizar a turma do sistema a partir do ID."
+    )
     @PutMapping("/{id}")
     public ResponseEntity<Turma> update(@PathVariable("id") Long id, @RequestBody @Valid TurmaRequest request) {
 
@@ -62,6 +85,10 @@ public class TurmaController {
         return ResponseEntity.ok().build();
     }
 
+    @Operation(
+            summary = "Serviço responsável por deletar uma turma do sistema a partir do ID.",
+            description = "Exemplo de um endpoint responsável por deletar uma turma do sistema a partir do ID."
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 

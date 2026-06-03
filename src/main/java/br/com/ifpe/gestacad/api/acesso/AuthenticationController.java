@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.segurança.JwtService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
+@Tag(
+    name = "API Autenticação",
+    description="API responsável por autenticar um usuário no sistema"
+)
 public class AuthenticationController {
 
     private final JwtService jwtService;
@@ -28,6 +34,10 @@ public class AuthenticationController {
         this.usuarioService = usuarioService;
     }
 
+    @Operation(
+            summary = "Serviço responsável por autenticar um usuário no sistema.",
+            description = "Exemplo de descrição de um endpoint responsável por autenticar um usuário no sistema."
+    )
     @PostMapping
     public Map<Object, Object> signin(@RequestBody AuthenticationRequest data) {
     
