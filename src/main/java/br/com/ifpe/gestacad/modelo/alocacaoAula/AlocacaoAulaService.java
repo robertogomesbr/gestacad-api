@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.horario.Horario;
 import br.com.ifpe.gestacad.modelo.horario.HorarioRepository;
 import jakarta.transaction.Transactional;
@@ -20,9 +21,10 @@ public class AlocacaoAulaService {
     private HorarioRepository horarioRepository;
 
     @Transactional
-    public AlocacaoAula save(AlocacaoAula alocacaoAula) {
+    public AlocacaoAula save(AlocacaoAula alocacaoAula, Usuario usuarioLogado) {
 
         alocacaoAula.setHabilitado(Boolean.TRUE);
+        alocacaoAula.setCriadoPor(usuarioLogado);
         return repository.save(alocacaoAula);
     }
     
@@ -37,7 +39,7 @@ public class AlocacaoAulaService {
     }
 
     @Transactional
-    public void update(Long id, AlocacaoAula alocacaoAulaAlterado) {
+    public void update(Long id, AlocacaoAula alocacaoAulaAlterado, Usuario usuarioLogado) {
 
         AlocacaoAula alocacaoAula = repository.findById(id).get();
         alocacaoAula.setTurma(alocacaoAulaAlterado.getTurma());
@@ -45,6 +47,7 @@ public class AlocacaoAulaService {
         alocacaoAula.setSala(alocacaoAulaAlterado.getSala());
         alocacaoAula.setProfessor(alocacaoAulaAlterado.getProfessor());
         alocacaoAula.setSemestreLetivo(alocacaoAulaAlterado.getSemestreLetivo());
+        alocacaoAula.setUltimaModificacaoPor(usuarioLogado);
 
         repository.save(alocacaoAula);
     }

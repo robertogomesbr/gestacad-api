@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SalaRequest {
     
-    @NotBlank(message = "O Blobo é de preenchimento obrigatório")
+    @NotBlank(message = "O Bloco é de preenchimento obrigatório")
     @Length(max = 50, message = "O Bloco deverá ter no máximo {max} caracteres")
     private String bloco;
 

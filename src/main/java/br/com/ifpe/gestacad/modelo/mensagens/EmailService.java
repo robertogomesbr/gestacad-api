@@ -14,7 +14,9 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
+import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -47,13 +49,47 @@ public class EmailService {
 
     public void enviarEmailConfirmacaoCadastroProfessor(Professor professor) {
 
-        String assuntoEmail = "Bem vindo ao nosso aplicativo";
+        String assuntoEmail = "Bem vindo a nossa plataforma!";
 
         Context params = new Context();
         params.setVariable("professor", professor);
 
-        this.sendMailTemplate("bem_vindo_professor.html", professor.getUsuario().getUsername(), assuntoEmail, params);
+        this.sendMailTemplate("cadastro_professor.html", professor.getUsuario().getUsername(), assuntoEmail, params);
     }
+
+    public void enviarEmailLoginProfessor(Professor professor){
+
+         String assuntoEmail = "Acesso na Plataforma!";
+
+        Context params = new Context();
+        params.setVariable("professor", professor);
+
+        this.sendMailTemplate("bem_vindo_professor_login.html", professor.getUsuario().getUsername(), assuntoEmail, params);
+    }
+
+    public void enviarEmailLoginAdmin(Usuario usuario){
+        
+        String assuntoEmail = "Acesso na Plataforma Admin!";
+
+        Context params = new Context();
+        params.setVariable("usuario", usuario);
+
+        this.sendMailTemplate("bem_vindo_admin_login.html", usuario.getUsername(), assuntoEmail, params);
+    }
+
+    public void enviarEmailReposicao(Reposicao reposicao) {
+
+    String assuntoEmail = "Reposição Concluída!";
+
+    Context params = new Context();
+    params.setVariable("reposicao", reposicao);
+
+    this.sendMailTemplate(
+            "reposicao_aula.html",
+            reposicao.getProfessor().getEmail(),
+            assuntoEmail,
+            params);
+}
 
     @Async
     private void sendMailTemplate(String template, String to, String subject, Context params) {

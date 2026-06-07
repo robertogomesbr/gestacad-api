@@ -25,8 +25,7 @@ import lombok.Setter;
 public class Perfil extends EntidadeNegocio implements GrantedAuthority {
   
    public static final String ROLE_PROFESSOR = "PROFESSOR";
-   public static final String ROLE_FUNCIONARIO_ADMIN = "ROLE_FUNCIONARIO_ADMIN"; // READ, DELETE, WRITE, UPDATE.
-   public static final String ROLE_FUNCIONARIO_USER = "ROLE_FUNCIONARIO_USER"; // READ, WRITE, UPDATE.
+   public static final String ROLE_ADMIN = "ADMIN"; // READ, DELETE, WRITE, UPDATE.
   
    @Column
    private String nome;
