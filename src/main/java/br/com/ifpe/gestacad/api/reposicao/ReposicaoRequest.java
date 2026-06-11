@@ -3,9 +3,12 @@ package br.com.ifpe.gestacad.api.reposicao;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +40,8 @@ public class ReposicaoRequest {
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horarioFim;
 
+    @NotBlank(message = "O status da reposição é obrigatório")
+    @Length(max = 30, message = "O status deve possuir no máximo {max} caracteres")
     private String statusReposicao;
 
     public Reposicao build() {

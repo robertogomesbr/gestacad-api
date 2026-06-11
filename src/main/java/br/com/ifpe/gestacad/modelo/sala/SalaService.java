@@ -4,19 +4,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class SalaService {
-    
+
     @Autowired
     private SalaRepository repository;
 
     @Transactional
-    public Sala save(Sala sala) {
-        
+    public Sala save(Sala sala, Usuario usuarioLogado) {
+
         sala.setHabilitado(Boolean.TRUE);
+        sala.setCriadoPor(usuarioLogado);
         return repository.save(sala);
     }
 
@@ -31,12 +33,13 @@ public class SalaService {
     }
 
     @Transactional
-    public void update(Long id, Sala salaAlterada) {
+    public void update(Long id, Sala salaAlterada, Usuario usuarioLogado) {
 
         Sala sala = repository.findById(id).get();
         sala.setBloco(salaAlterada.getBloco());
         sala.setNumero(salaAlterada.getNumero());
         sala.setTipo(salaAlterada.getTipo());
+        sala.setUltimaModificacaoPor(usuarioLogado);
 
         repository.save(sala);
     }

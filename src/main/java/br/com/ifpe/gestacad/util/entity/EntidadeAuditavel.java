@@ -2,14 +2,18 @@ package br.com.ifpe.gestacad.util.entity;
 
 import java.time.LocalDate;
 
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.Column;
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Version;
 import lombok.Getter;
@@ -33,11 +37,13 @@ public class EntidadeAuditavel extends EntidadeNegocio {
     @LastModifiedDate
     private LocalDate dataUltimaModificacao;
 
-    @JsonIgnore
-    @Column
-    private Long criadoPor;
+    @CreatedBy
+    @ManyToOne
+    @JoinColumn
+    private Usuario criadoPor;
 
-    @JsonIgnore
-    @Column
-    private Long ultimaModificacaoPor;
+    @LastModifiedBy
+    @ManyToOne
+    @JoinColumn
+    private Usuario ultimaModificacaoPor;
 }
