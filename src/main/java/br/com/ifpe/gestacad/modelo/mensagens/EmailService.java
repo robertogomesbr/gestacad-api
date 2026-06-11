@@ -1,5 +1,6 @@
 package br.com.ifpe.gestacad.modelo.mensagens;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
@@ -17,128 +18,120 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-/**
- * @author Roberto Alencar
- */
 @Component
 public class EmailService {
 
     @Value("${spring.mail.username}")
-    String username;
+    private String username;
 
     @Value("${spring.mail.password}")
-    String password;
+    private String password;
 
     @Value("${spring.mail.host}")
-    String host;
+    private String host;
 
     @Value("${spring.mail.port}")
-    int port;
+    private int port;
 
     @Value("${spring.mail.properties.mail.smtp.auth}")
-    String smtpAuth;
+    private String smtpAuth;
 
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
-    String starttls;
+    private String starttls;
 
     private JavaMailSender emailSender;
+    private TemplateEngine templateEngine;
 
+    @PostConstruct
+    public void init() {
+        this.emailSender = createJavaMailSender();
+        this.templateEngine = createTemplateEngine();
+    }
+
+    @Async("emailExecutor")
     public void enviarEmailConfirmacaoCadastroProfessor(Professor professor) {
-
         String assuntoEmail = "Bem vindo a nossa plataforma!";
-
         Context params = new Context();
         params.setVariable("professor", professor);
-
-        this.sendMailTemplate("cadastro_professor.html", professor.getUsuario().getUsername(), assuntoEmail, params);
+        this.processAndSend("cadastro_professor", professor.getUsuario().getUsername(), assuntoEmail, params);
     }
 
+    @Async("emailExecutor")
     public void enviarEmailLoginProfessor(Professor professor){
-
-         String assuntoEmail = "Acesso na Plataforma!";
-
+        String assuntoEmail = "Acesso na Plataforma!";
         Context params = new Context();
         params.setVariable("professor", professor);
-
-        this.sendMailTemplate("bem_vindo_professor_login.html", professor.getUsuario().getUsername(), assuntoEmail, params);
+        this.processAndSend("bem_vindo_professor_login", professor.getUsuario().getUsername(), assuntoEmail, params);
     }
 
+    @Async("emailExecutor")
     public void enviarEmailLoginAdmin(Usuario usuario){
-        
         String assuntoEmail = "Acesso na Plataforma Admin!";
-
         Context params = new Context();
         params.setVariable("usuario", usuario);
-
-        this.sendMailTemplate("bem_vindo_admin_login.html", usuario.getUsername(), assuntoEmail, params);
+        this.processAndSend("bem_vindo_admin_login", usuario.getUsername(), assuntoEmail, params);
     }
 
+    @Async("emailExecutor")
     public void enviarEmailReposicao(Reposicao reposicao) {
-
-    String assuntoEmail = "Reposição Concluída!";
-
-    Context params = new Context();
-    params.setVariable("reposicao", reposicao);
-
-    this.sendMailTemplate(
-            "reposicao_aula.html",
-            reposicao.getProfessor().getEmail(),
-            assuntoEmail,
-            params);
-}
-
-    @Async
-    private void sendMailTemplate(String template, String to, String subject, Context params) {
-
-        TemplateEngine templateEngine = new TemplateEngine();
-
-        ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setCharacterEncoding("UTF-8");
-        templateResolver.setOrder(0);
-
-        templateEngine.setTemplateResolver(templateResolver);
-
-        String content = templateEngine.process(template, params);
-        this.sendMail(to, subject, content, Boolean.TRUE);
+        String assuntoEmail = "Reposição Concluída!";
+        Context params = new Context();
+        params.setVariable("reposicao", reposicao);
+        this.processAndSend("reposicao_aula", reposicao.getProfessor().getEmail(), assuntoEmail, params);
     }
 
-    @Async
-    private void sendMail(String to, String subject, String content, Boolean html) {
-
-        emailSender = getJavaMailSender();
-
-        MimeMessage message = emailSender.createMimeMessage();
-
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
+    private void processAndSend(String template, String to, String subject, Context params) {
         try {
+            String content = templateEngine.process(template, params);
+            this.sendMail(to, subject, content);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            helper.setFrom(new InternetAddress("not.reply@delifacil.com.br"));
+    private void sendMail(String to, String subject, String content) throws UnsupportedEncodingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
+
+            helper.setFrom(new InternetAddress(username, "GestAcad-no-reply"));
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(new String(content.getBytes(), StandardCharsets.ISO_8859_1), html);
+            helper.setText(content, true); // true = processa HTML corretamente
             helper.setEncodeFilenames(true);
 
+            emailSender.send(message);
         } catch (MessagingException e) {
             e.printStackTrace();
         }
-
-        emailSender.send(message);
     }
 
-    private JavaMailSender getJavaMailSender() {
+    private TemplateEngine createTemplateEngine() {
+        TemplateEngine engine = new TemplateEngine();
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        
+        resolver.setPrefix("templates/");
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode(TemplateMode.HTML);
+        resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        resolver.setOrder(0);
+        
+        resolver.setCacheable(true);
+        resolver.setCacheTTLMs(null); 
 
+        engine.setTemplateResolver(resolver);
+        return engine;
+    }
+
+    private JavaMailSender createJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
         mailSender.setPort(port);
-
         mailSender.setUsername(username);
         mailSender.setPassword(password);
 
@@ -147,7 +140,6 @@ public class EmailService {
         props.put("mail.smtp.auth", smtpAuth);
         props.put("mail.smtp.starttls.enable", starttls);
         props.put("mail.debug", "false");
-        props.put("spring.mail.properties.mail.smtp.starttls.enable", "true");
 
         return mailSender;
     }
