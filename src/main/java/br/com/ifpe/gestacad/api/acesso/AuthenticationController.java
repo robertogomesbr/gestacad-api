@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.acesso.Perfil;
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
-import br.com.ifpe.gestacad.modelo.acesso.UsuarioRepository;
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
@@ -20,7 +19,6 @@ import br.com.ifpe.gestacad.modelo.professor.ProfessorRepository;
 import br.com.ifpe.gestacad.modelo.segurança.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Email;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -33,9 +31,9 @@ public class AuthenticationController {
 
     private final JwtService jwtService;
 
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    private EmailService emailService;
+    private final EmailService emailService;
 
     @Autowired
     private ProfessorRepository professorRepository;

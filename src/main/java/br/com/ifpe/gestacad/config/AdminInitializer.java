@@ -39,7 +39,7 @@ public class AdminInitializer implements CommandLineRunner {
 
         if (!adminExiste) {
             Usuario admin = new Usuario();
-            admin.setUsername("gestacad@uorak.com");
+            admin.setUsername("gestacad@uorak.com"); // para olhar o email acesse https://www.invertexto.com/gerador-email-temporario?email=gestacad@uorak.com
             admin.setPassword(passwordEncoder.encode("123"));
             admin.setHabilitado(true);
 
