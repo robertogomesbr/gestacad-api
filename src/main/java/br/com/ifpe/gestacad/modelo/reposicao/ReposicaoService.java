@@ -23,6 +23,7 @@ public class ReposicaoService {
 
         reposicao.setHabilitado(Boolean.TRUE);
         reposicao.setCriadoPor(usuarioLogado);
+        reposicao.setStatusReposicao("PENDENTE");
 
         emailService.enviarEmailReposicao(reposicao);
 

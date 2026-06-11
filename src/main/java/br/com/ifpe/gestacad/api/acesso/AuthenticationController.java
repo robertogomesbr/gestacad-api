@@ -74,12 +74,12 @@ public class AuthenticationController {
 
         } 
         
-        if (isProfessor) {
+        Professor professor = professorRepository.findByUsuario(authenticatedUser)
+                .orElse(null);       
 
-            Professor professor = professorRepository.findByUsuario(authenticatedUser)
-                    .orElseThrow();
-
+        if (professor != null) {
             emailService.enviarEmailLoginProfessor(professor);
+            loginResponse.put("id", professor.getId());
         }
 
         return loginResponse;
