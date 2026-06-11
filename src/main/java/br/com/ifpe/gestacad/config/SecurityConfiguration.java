@@ -41,6 +41,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                 // EndPoints Públicos
                 .requestMatchers(HttpMethod.POST, "/api/professor").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/professor", "/api/professor/**")
+                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
+                .requestMatchers(HttpMethod.PUT, "/api/professor/**")
+                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
+                .requestMatchers(HttpMethod.DELETE, "/api/professor/**")
+                .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
                 .requestMatchers(HttpMethod.POST, "/api/auth").permitAll()
 
                 // Curso, Turma, Disciplina, Sala — apenas Admin
@@ -53,8 +59,8 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.DELETE, "/api/curso/**", "/api/turma/**",
                         "/api/disciplina/**", "/api/sala/**")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN)
-                .requestMatchers(HttpMethod.GET, "/api/curso/**", "/api/turma/**",
-                        "/api/disciplina/**", "/api/sala/**")
+                .requestMatchers(HttpMethod.GET, "/api/curso", "/api/curso/**", "/api/turma", "/api/turma/**",
+                        "/api/disciplina", "/api/disciplina/**", "/api/sala", "/api/sala/**")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
 
                 // Alocação de Aula — Admin gerencia, Professor consulta
@@ -64,13 +70,13 @@ public class SecurityConfiguration {
                 .hasAnyAuthority(Perfil.ROLE_ADMIN)
                 .requestMatchers(HttpMethod.DELETE, "/api/alocacao-aula/**")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN)
-                .requestMatchers(HttpMethod.GET, "/api/alocacao-aula/**")
+                .requestMatchers(HttpMethod.GET, "/api/alocacao-aula", "/api/alocacao-aula/**")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
 
                 // Reposição de Aula — Professor e Admin
                 .requestMatchers(HttpMethod.POST, "/api/reposicao")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
-                .requestMatchers(HttpMethod.GET, "/api/reposicao/**")
+                .requestMatchers(HttpMethod.GET, "/api/reposicao", "/api/reposicao/**")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
                 .requestMatchers(HttpMethod.PUT, "/api/reposicao/**")
                 .hasAnyAuthority(Perfil.ROLE_ADMIN, Perfil.ROLE_PROFESSOR)
