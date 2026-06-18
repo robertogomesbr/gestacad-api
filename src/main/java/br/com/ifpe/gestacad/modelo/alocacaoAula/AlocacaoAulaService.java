@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.horario.Horario;
 import br.com.ifpe.gestacad.modelo.horario.HorarioRepository;
+import br.com.ifpe.gestacad.util.exception.HorarioException;
 import jakarta.transaction.Transactional;
 
 @Service
 public class AlocacaoAulaService {
-    
+
     @Autowired
     private AlocacaoAulaRepository repository;
 
@@ -27,14 +28,14 @@ public class AlocacaoAulaService {
         alocacaoAula.setCriadoPor(usuarioLogado);
         return repository.save(alocacaoAula);
     }
-    
+
     public List<AlocacaoAula> listarTodos() {
 
         return repository.findAll();
     }
 
     public AlocacaoAula obterPorID(Long id) {
-        
+
         return repository.findById(id).get();
     }
 
@@ -51,7 +52,7 @@ public class AlocacaoAulaService {
 
         repository.save(alocacaoAula);
     }
-    
+
     @Transactional
     public void delete(Long id) {
 
@@ -66,6 +67,7 @@ public class AlocacaoAulaService {
 
         AlocacaoAula alocacaoAula = this.obterPorID(alocacaoAulaId);
 
+        validarHorario(alocacaoAula, horario);
         // Primeiro salva o Horario:
 
         horario.setAlocacaoAula(alocacaoAula);
@@ -91,6 +93,12 @@ public class AlocacaoAulaService {
     public Horario atualizarHorario(Long id, Horario horarioAlterado) {
 
         Horario horario = horarioRepository.findById(id).get();
+
+        validarHorarioAtualizacao(
+                horario.getAlocacaoAula(),
+                horarioAlterado,
+                id);
+
         horario.setHorarioInicio(horarioAlterado.getHorarioInicio());
         horario.setHorarioFim(horarioAlterado.getHorarioFim());
         horario.setDiaSemana(horarioAlterado.getDiaSemana());
@@ -110,8 +118,111 @@ public class AlocacaoAulaService {
         horarioRepository.save(horario);
 
         AlocacaoAula alocacaoAula = this.obterPorID(horario.getAlocacaoAula().getId());
-        alocacaoAula.getHorarios().remove(horario);
+        alocacaoAula.getHorarios().removeIf(h -> h.getId().equals(idhorario));
         repository.save(alocacaoAula);
     }
 
+    private void validarHorario(AlocacaoAula alocacao, Horario horario) {
+
+        if (!horario.getHorarioFim().isAfter(horario.getHorarioInicio())) {
+            throw new HorarioException("Horário final deve ser maior que o horário inicial.");
+        }
+
+        Long professorId = alocacao.getProfessor().getId();
+
+        Long salaId = alocacao.getSala().getId();
+
+        Long turmaId = alocacao.getTurma().getId();
+
+        if (horarioRepository.verificarConflitoProfessor(
+                professorId,
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(
+                    HorarioException.MSG_PROFESSOR_OCUPADO);
+        }
+
+        if (horarioRepository.verificarConflitoSala(
+                salaId,
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(
+                    HorarioException.MSG_SALA_OCUPADA);
+        }
+
+        if (horarioRepository.verificarConflitoTurma(
+                turmaId,
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(
+                    HorarioException.MSG_TURMA_OCUPADA);
+        }
+
+        if (horarioRepository.verificarHorarioDuplicado(
+                alocacao.getId(),
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(
+                    HorarioException.MSG_HORARIO_DUPLICADO);
+        }
+    }
+
+    private void validarHorarioAtualizacao(AlocacaoAula alocacao, Horario horario, Long horarioId) {
+
+        if (!horario.getHorarioFim().isAfter(horario.getHorarioInicio())) {
+            throw new HorarioException("Horário final deve ser maior que o horário inicial.");
+        }
+
+        Long professorId = alocacao.getProfessor().getId();
+        Long salaId = alocacao.getSala().getId();
+        Long turmaId = alocacao.getTurma().getId();
+
+        if (horarioRepository.verificarConflitoProfessorAtualizacao(
+                horarioId,
+                professorId,
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(HorarioException.MSG_PROFESSOR_OCUPADO);
+        }
+
+        if (horarioRepository.verificarConflitoSalaAtualizacao(
+                horarioId,
+                salaId,
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(HorarioException.MSG_SALA_OCUPADA);
+        }
+
+        if (horarioRepository.verificarConflitoTurmaAtualizacao(
+                horarioId,
+                turmaId,
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(HorarioException.MSG_TURMA_OCUPADA);
+        }
+
+        if (horarioRepository.verificarHorarioDuplicadoAtualizacao(
+                horarioId,
+                alocacao.getId(),
+                horario.getDiaSemana(),
+                horario.getHorarioInicio(),
+                horario.getHorarioFim()) > 0) {
+
+            throw new HorarioException(HorarioException.MSG_HORARIO_DUPLICADO);
+        }
+    }
 }
