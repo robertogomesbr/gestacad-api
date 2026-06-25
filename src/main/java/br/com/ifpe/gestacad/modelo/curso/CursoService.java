@@ -53,4 +53,25 @@ public class CursoService {
 
         repository.save(curso);
     }
+
+    public List<Curso> filtrar(String nome, String area) {
+
+       List<Curso> listaCursos = repository.findAll();
+
+       if ((nome != null && !"".equals(nome)) &&
+           (area == null || "".equals(area))) {
+               listaCursos = repository.consultarPorNome(nome);
+       } else if (
+           (nome == null || "".equals(nome)) &&
+           (area != null && !"".equals(area))) {    
+               listaCursos = repository.consultarPorArea(area);
+           }else if
+              ((nome != null && !"".equals(nome)) &&
+               (area != null && !"".equals(area))) {
+                   listaCursos = repository.consultarPorNomeEArea(nome, area);
+               }
+            
+       return listaCursos;
+}
+
 }

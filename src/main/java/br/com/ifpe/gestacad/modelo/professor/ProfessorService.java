@@ -83,4 +83,24 @@ public class ProfessorService {
 
         repository.save(professor);
     }
+
+    public List<Professor> filtrar(String nome, String cpf) {
+
+       List<Professor> listaProfessores = repository.findAll();
+
+       if ((nome != null && !"".equals(nome))) {
+               listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+       }else if (
+           (nome == null || "".equals(cpf))) {    
+               listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
+           }else if (
+           (nome != null && !"".equals(nome)) &&
+              (cpf != null && !"".equals(cpf))) {    
+                listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+                listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
+              }
+
+       return listaProfessores;
+}
+
 }

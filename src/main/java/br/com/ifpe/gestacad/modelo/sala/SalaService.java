@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -52,4 +52,22 @@ public class SalaService {
 
         repository.save(sala);
     }
+
+public List<Sala> filtrar(String bloco, String tipo) {
+    
+    if (bloco != null && !bloco.trim().isEmpty() && tipo != null && !tipo.trim().isEmpty()) {
+        return repository.findByBlocoContainingIgnoreCaseAndTipoContainingIgnoreCase(bloco, tipo);
+    }
+    
+    else if (bloco != null && !bloco.trim().isEmpty()) {
+        return repository.findByBlocoContainingIgnoreCase(bloco);
+    }
+    
+    else if (tipo != null && !tipo.trim().isEmpty()) {
+        return repository.findByTipoContainingIgnoreCase(tipo);
+    }
+
+    return repository.findAll();
+}
+
 }

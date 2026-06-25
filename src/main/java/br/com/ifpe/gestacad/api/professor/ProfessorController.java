@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
@@ -94,4 +95,13 @@ public class ProfessorController {
         professorService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+      @PostMapping("/filtrar")
+   public List<Professor> filtrar(
+           @RequestParam(value = "nome", required = false) String nome,
+           @RequestParam(value = "cpf", required = false) String cpf) {
+
+       return professorService.filtrar(nome, cpf);
+   }
+
 }

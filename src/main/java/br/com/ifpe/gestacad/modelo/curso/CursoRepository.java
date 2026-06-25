@@ -1,7 +1,19 @@
 package br.com.ifpe.gestacad.modelo.curso;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 public interface CursoRepository extends JpaRepository<Curso, Long> {
     
+  @Query(value = "SELECT c FROM Curso c WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', :nome, '%')) ORDER BY c.nome ASC")
+    List<Curso> consultarPorNome(String nome);
+
+    @Query(value = "SELECT c FROM Curso c WHERE LOWER(c.area) LIKE LOWER(CONCAT('%', :area, '%')) ORDER BY c.area ASC")
+    List<Curso> consultarPorArea(String area);
+
+    @Query(value = "SELECT c FROM Curso c WHERE LOWER(c.nome) LIKE LOWER(CONCAT('%', :nome, '%')) AND LOWER(c.area) LIKE LOWER(CONCAT('%', :area, '%')) ORDER BY c.nome ASC")
+    List<Curso> consultarPorNomeEArea(String nome, String area);
+
 }

@@ -89,4 +89,13 @@ public class CursoController {
         cursoService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+      @PostMapping("/filtrar")
+   public List<Curso> filtrar(
+           @RequestParam(value = "nome", required = false) String nome,
+           @RequestParam(value = "area", required = false) String area) {
+
+       return cursoService.filtrar(nome, area);
+   }
+
 }

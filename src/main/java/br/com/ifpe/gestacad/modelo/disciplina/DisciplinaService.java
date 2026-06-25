@@ -51,5 +51,23 @@ public class DisciplinaService {
 
         repository.save(disciplina);
     }
+    
+public List<Disciplina> filtrar(String nome, Long idCurso) {
+    
+
+    if (nome != null && !nome.trim().isEmpty() && idCurso != null) {
+        return repository.findByNomeContainingIgnoreCaseAndCursoIdOrderByNomeAsc(nome, idCurso);
+    }
+    
+    else if (nome != null && !nome.trim().isEmpty()) {
+        return repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+    }
+
+   else if (idCurso != null) {
+        return repository.findByCursoIdOrderByNomeAsc(idCurso);
+    }
+    
+    return repository.findAll();
+}
 
 }

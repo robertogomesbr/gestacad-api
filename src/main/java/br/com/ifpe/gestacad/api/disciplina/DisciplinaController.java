@@ -94,4 +94,14 @@ public class DisciplinaController {
         disciplinaService.delete(id);
         return ResponseEntity.ok().build();
     }
+    
+      @PostMapping("/filtrar")
+   public List<Disciplina> filtrar(
+           @RequestParam(value = "nome", required = false) String nome,
+           @RequestParam(value = "idCurso", required = false) Long idCurso) {
+
+       return disciplinaService.filtrar(nome, idCurso);
+   }
+
+
 }

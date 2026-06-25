@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ifpe.gestacad.modelo.curso.CursoService;
@@ -95,4 +96,16 @@ public class TurmaController {
         turmaService.delete(id);
         return ResponseEntity.ok().build();
     }
+
+    
+  @PostMapping("/filtrar")
+   public List<Turma> filtrar(
+           @RequestParam(value = "nome", required = false) String nome,
+           @RequestParam(value = "turno", required = false) String turno,
+           @RequestParam(value = "idCurso", required = false) Long idCurso) {
+
+       return turmaService.filtrar(nome, turno, idCurso);
+   }
+
+
 }
