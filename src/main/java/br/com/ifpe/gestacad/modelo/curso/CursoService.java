@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -14,9 +15,11 @@ public class CursoService {
     private CursoRepository repository;
 
     @Transactional
-    public Curso save(Curso curso) {
+    public Curso save(Curso curso, Usuario usuarioLogado) {
         
         curso.setHabilitado(Boolean.TRUE);
+        curso.setCriadoPor(usuarioLogado);
+
         return repository.save(curso);
     }
     
@@ -31,12 +34,13 @@ public class CursoService {
     }
 
     @Transactional
-    public void update(Long id, Curso cursoAlterada) {
+    public void update(Long id, Curso cursoAlterada, Usuario usuarioLogado) {
 
         Curso curso = repository.findById(id).get();
         curso.setNome(cursoAlterada.getNome());
         curso.setQtdPeriodos(cursoAlterada.getQtdPeriodos());
         curso.setArea(cursoAlterada.getArea());
+        curso.setUltimaModificacaoPor(usuarioLogado);
 
         repository.save(curso);
     }
@@ -49,4 +53,25 @@ public class CursoService {
 
         repository.save(curso);
     }
+
+    public List<Curso> filtrar(String nome, String area) {
+
+       List<Curso> listaCursos = repository.findAll();
+
+       if ((nome != null && !"".equals(nome)) &&
+           (area == null || "".equals(area))) {
+               listaCursos = repository.consultarPorNome(nome);
+       } else if (
+           (nome == null || "".equals(nome)) &&
+           (area != null && !"".equals(area))) {    
+               listaCursos = repository.consultarPorArea(area);
+           }else if
+              ((nome != null && !"".equals(nome)) &&
+               (area != null && !"".equals(area))) {
+                   listaCursos = repository.consultarPorNomeEArea(nome, area);
+               }
+            
+       return listaCursos;
+}
+
 }

@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.ifpe.gestacad.modelo.acesso.Usuario;
+import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -13,10 +15,18 @@ public class ReposicaoService {
     @Autowired
     private ReposicaoRepository repository;
 
+    @Autowired
+    private EmailService emailService;
+
     @Transactional
-    public Reposicao save(Reposicao reposicao) {
+    public Reposicao save(Reposicao reposicao, Usuario usuarioLogado) {
 
         reposicao.setHabilitado(Boolean.TRUE);
+        reposicao.setCriadoPor(usuarioLogado);
+        reposicao.setStatusReposicao("PENDENTE");
+
+        emailService.enviarEmailReposicao(reposicao);
+
         return repository.save(reposicao);
     }
 
@@ -31,7 +41,7 @@ public class ReposicaoService {
     }
 
     @Transactional
-    public void update(Long id, Reposicao reposicaoAlterada) {
+    public void update(Long id, Reposicao reposicaoAlterada, Usuario usuarioLogado) {
 
         Reposicao reposicao = repository.findById(id).get();
         reposicao.setDisciplina(reposicaoAlterada.getDisciplina());
@@ -43,6 +53,8 @@ public class ReposicaoService {
         reposicao.setHorarioInicio(reposicaoAlterada.getHorarioInicio());
         reposicao.setHorarioFim(reposicaoAlterada.getHorarioFim());
         reposicao.setStatusReposicao(reposicaoAlterada.getStatusReposicao());
+
+        reposicao.setUltimaModificacaoPor(usuarioLogado);
 
         repository.save(reposicao);
     }

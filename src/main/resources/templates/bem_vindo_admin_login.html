@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Administrativo - GestAcad</title>
+</head>
+
+<body style="margin:0; padding:0; background:#f3f6f4; font-family:'Segoe UI', Tahoma, sans-serif;">
+
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"
+           style="background:#f3f6f4; padding:40px 0;">
+        <tr>
+            <td align="center">
+
+                <table width="600" cellpadding="0" cellspacing="0" border="0"
+                       style="background:#ffffff; box-shadow:0 4px 18px rgba(0,0,0,0.08);">
+
+                    <!-- Cabeçalho -->
+                    <tr>
+                        <td style="background:#008000; padding:35px 40px; text-align:center;">
+                            <h1 style="margin:0; color:#ffffff; font-size:32px; font-weight:bold;">
+                                GestAcad
+                            </h1>
+
+                            <p style="margin-top:10px; color:#dff5df; font-size:16px;">
+                                Painel Administrativo
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Conteúdo -->
+                    <tr>
+                        <td style="padding:45px 40px; color:#333333;">
+
+                            <h2 style="margin-top:0; color:#008000; font-size:28px;">
+                                Login Administrativo Realizado
+                            </h2>
+
+                            <p style="font-size:17px; line-height:1.8;">
+                                Olá,
+                                <strong th:text="${usuario.username}">
+                                    Administrador
+                                </strong>.
+                            </p>
+
+                            <p style="font-size:16px; line-height:1.8;">
+                                Foi identificado um acesso administrativo ao sistema
+                                <strong>GestAcad</strong>.
+                            </p>
+
+                            <table width="100%"
+                                   cellpadding="10"
+                                   cellspacing="0"
+                                   style="margin-top:25px; border-collapse:collapse; border:1px solid #e0e0e0;">
+
+                                <tr style="background:#f8f8f8;">
+                                    <td style="font-weight:bold; width:35%;">
+                                        Usuário
+                                    </td>
+                                    <td th:text="${usuario.username}">
+                                        usuario@email.com
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td style="font-weight:bold;">
+                                        Perfil
+                                    </td>
+                                    <td>
+                                        Administrador
+                                    </td>
+                                </tr>
+
+                                <tr style="background:#f8f8f8;">
+                                    <td style="font-weight:bold;">
+                                        Status da Conta
+                                    </td>
+                                    <td>
+                                        <span th:if="${usuario.habilitado}"
+                                              style="color:green; font-weight:bold;">
+                                            Habilitada
+                                        </span>
+
+                                        <span th:unless="${usuario.habilitado}"
+                                              style="color:red; font-weight:bold;">
+                                            Desabilitada
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                            <p style="margin-top:30px; font-size:15px; line-height:1.8;">
+                                Caso este acesso não tenha sido realizado por você,
+                                recomendamos alterar sua senha imediatamente e informar
+                                a equipe responsável pelo sistema.
+                            </p>
+
+                        </td>
+                    </tr>
+
+                    <!-- Rodapé -->
+                    <tr>
+                        <td style="background:#f5f5f5; padding:20px; text-align:center; color:#777777; font-size:13px;">
+                            © 2026 GestAcad - Instituto Federal de Pernambuco
+                        </td>
+                    </tr>
+
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

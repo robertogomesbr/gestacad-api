@@ -32,13 +32,13 @@ public class Disciplina extends EntidadeAuditavel {
     @ManyToOne
     private Curso curso;
 
-    @Column
+    @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column
+    @Column(nullable = false)
     private Integer chTotal;
 
-    @Column
+    @Column(length = 20)
     private String periodoOfertado;
 
 }

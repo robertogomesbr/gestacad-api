@@ -30,13 +30,13 @@ public class Curso extends EntidadeAuditavel {
     @OneToMany(mappedBy = "curso", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Disciplina> disciplinas;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String nome;
 
-    @Column
+    @Column(nullable = false)
     private Integer qtdPeriodos;
 
-    @Column
+    @Column(nullable = false, length = 50)
     private String area;
 
 }

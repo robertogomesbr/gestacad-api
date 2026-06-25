@@ -55,4 +55,36 @@ public class TurmaService {
 
         repository.save(turma);
     }
+
+    public List<Turma> filtrar(String nome, String turno, Long idCurso) {
+
+       List<Turma> listaTurmas = repository.findAll();
+   
+    if ((nome != null && !"".equals(nome)) && (turno == null || "".equals(turno)) && (idCurso == null)) {
+        listaTurmas = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+    } 
+
+    else if ((nome == null || "".equals(nome)) && (turno != null && !"".equals(turno)) && (idCurso == null)) {    
+        listaTurmas = repository.findByTurnoContainingIgnoreCase(turno);
+    } 
+
+    else if ((nome == null || "".equals(nome)) && (turno == null || "".equals(turno)) && (idCurso != null)) {
+        listaTurmas = repository.consultarPorCurso(idCurso);
+    } 
+
+    else if ((nome != null && !"".equals(nome)) && (turno == null || "".equals(turno)) && (idCurso != null)) {
+        listaTurmas = repository.consultarPorNomeECurso(nome, idCurso);
+    }
+
+    else if ((nome == null || "".equals(nome)) && (turno != null && !"".equals(turno)) && (idCurso != null)) {
+        listaTurmas = repository.consultarPorTurnoECurso(turno, idCurso);
+    }
+   
+    else if ((nome == null || "".equals(nome)) && (turno == null || "".equals(turno)) && (idCurso == null)) {
+        listaTurmas = repository.findAll();
+    }
+
+       return listaTurmas;
+}
+
 }
