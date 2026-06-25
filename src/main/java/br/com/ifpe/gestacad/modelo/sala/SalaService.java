@@ -53,21 +53,28 @@ public class SalaService {
         repository.save(sala);
     }
 
-public List<Sala> filtrar(String bloco, String tipo) {
+public List<Sala> filtrar(String bloco, String tipo, Integer numero) {
     
-    if (bloco != null && !bloco.trim().isEmpty() && tipo != null && !tipo.trim().isEmpty()) {
-        return repository.findByBlocoContainingIgnoreCaseAndTipoContainingIgnoreCase(bloco, tipo);
+    if (bloco != null && !bloco.trim().isEmpty() && tipo != null && !tipo.trim().isEmpty() && numero != null) {
+        return repository.consultarPorBlocoETipoENumero(bloco, tipo, numero);
+    }
+    
+    else if (bloco != null && !bloco.trim().isEmpty() && tipo != null && !tipo.trim().isEmpty()) {
+        return repository.consultarPorBlocoETipo(bloco, tipo);
     }
     
     else if (bloco != null && !bloco.trim().isEmpty()) {
-        return repository.findByBlocoContainingIgnoreCase(bloco);
+        return repository.consultarPorBloco(bloco);
     }
     
     else if (tipo != null && !tipo.trim().isEmpty()) {
-        return repository.findByTipoContainingIgnoreCase(tipo);
+        return repository.consultarPorTipo(tipo);
+    }
+
+    else if (numero != null) {
+        return repository.consultarPorNumero(numero);
     }
 
     return repository.findAll();
 }
-
 }

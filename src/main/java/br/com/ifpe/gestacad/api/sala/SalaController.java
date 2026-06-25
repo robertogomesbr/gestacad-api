@@ -95,9 +95,10 @@ public class SalaController {
      @PostMapping("/filtrar")
    public List<Sala> filtrar(
            @RequestParam(value = "bloco", required = false) String bloco,
-           @RequestParam(value = "tipo", required = false) String tipo) {
+           @RequestParam(value = "tipo", required = false) String tipo,
+           @RequestParam(value = "numero", required = false) Integer numero) {
 
-       return salaService.filtrar(bloco, tipo);
+       return salaService.filtrar(bloco, tipo, numero);
    }
 
 }

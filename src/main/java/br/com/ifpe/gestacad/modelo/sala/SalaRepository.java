@@ -7,11 +7,22 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface SalaRepository extends JpaRepository<Sala, Long> {
     
-  List<Sala> findByTipoContainingIgnoreCase(String tipo);
-List<Sala> findByBlocoContainingIgnoreCaseAndTipoContainingIgnoreCase(String bloco, String tipo);
-  List<Sala> findByBlocoContainingIgnoreCase(String bloco);
 
+   
+    @Query("SELECT s FROM Sala s WHERE LOWER(s.tipo) LIKE LOWER(CONCAT('%', :tipo, '%')) ORDER BY s.bloco ASC, s.numero ASC")
+    List<Sala> consultarPorTipo(String tipo);
 
+    @Query("SELECT s FROM Sala s WHERE LOWER(s.bloco) LIKE LOWER(CONCAT('%', :bloco, '%'))")
+    List<Sala> consultarPorBloco(String bloco);
+
+    @Query("SELECT s FROM Sala s WHERE s.numero = :numero ORDER BY s.bloco ASC, s.numero ASC")
+    List<Sala> consultarPorNumero(Integer numero);
+
+    @Query("SELECT s FROM Sala s WHERE LOWER(s.bloco) LIKE LOWER(CONCAT('%', :bloco, '%')) AND LOWER(s.tipo) LIKE LOWER(CONCAT('%', :tipo, '%'))")
+    List<Sala> consultarPorBlocoETipo(String bloco, String tipo);
+
+    @Query("SELECT s FROM Sala s WHERE LOWER(s.bloco) LIKE LOWER(CONCAT('%', :bloco, '%')) AND LOWER(s.tipo) LIKE LOWER(CONCAT('%', :tipo, '%')) AND s.numero = :numero ORDER BY s.bloco ASC, s.numero ASC")
+    List<Sala> consultarPorBlocoETipoENumero(String bloco, String tipo, Integer numero);
 
 
 }
