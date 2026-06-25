@@ -67,4 +67,85 @@ public class ReposicaoService {
 
         repository.save(reposicao);
     }
+
+       public Reposicao salvar(Reposicao novaReposicao) {
+        
+        if (repository.verificarReposicaoDuplicada(
+                novaReposicao.getDisciplina().getId(),
+                novaReposicao.getTurma().getId(),
+                novaReposicao.getDataReposicao(),
+                novaReposicao.getHorarioInicio(),
+                novaReposicao.getHorarioFim()) > 0) {
+            throw new RuntimeException("Esta reposição já está cadastrada para este mesmo horário.");
+        }
+
+        if (repository.verificarConflitoProfessor(
+                novaReposicao.getProfessor().getId(),
+                novaReposicao.getDataReposicao(),
+                novaReposicao.getHorarioInicio(),
+                novaReposicao.getHorarioFim()) > 0) {
+            throw new RuntimeException("O professor selecionado já possui uma atividade agendada neste horário.");
+        }
+
+        if (repository.verificarConflitoSala(
+                novaReposicao.getSala().getId(),
+                novaReposicao.getDataReposicao(),
+                novaReposicao.getHorarioInicio(),
+                novaReposicao.getHorarioFim()) > 0) {
+            throw new RuntimeException("A sala selecionada já está ocupada neste horário.");
+        }
+
+        if (repository.verificarConflitoTurma(
+                novaReposicao.getTurma().getId(),
+                novaReposicao.getDataReposicao(),
+                novaReposicao.getHorarioInicio(),
+                novaReposicao.getHorarioFim()) > 0) {
+            throw new RuntimeException("A turma selecionada já possui outra aula ou reposição neste horário.");
+        }
+
+        return repository.save(novaReposicao);
+    }
+
+    public Reposicao atualizar(Long id, Reposicao reposicaoAtualizada) {
+        
+        if (repository.verificarReposicaoDuplicadaAtualizacao(
+                id,
+                reposicaoAtualizada.getDisciplina().getId(),
+                reposicaoAtualizada.getTurma().getId(),
+                reposicaoAtualizada.getDataReposicao(),
+                reposicaoAtualizada.getHorarioInicio(),
+                reposicaoAtualizada.getHorarioFim()) > 0) {
+            throw new RuntimeException("Já existe outra reposição idêntica cadastrada para este mesmo horário.");
+        }
+
+        if (repository.verificarConflitoProfessorAtualizacao(
+                id,
+                reposicaoAtualizada.getProfessor().getId(),
+                reposicaoAtualizada.getDataReposicao(),
+                reposicaoAtualizada.getHorarioInicio(),
+                reposicaoAtualizada.getHorarioFim()) > 0) {
+            throw new RuntimeException("O professor selecionado possui conflito com outra atividade neste horário.");
+        }
+
+        if (repository.verificarConflitoSalaAtualizacao(
+                id,
+                reposicaoAtualizada.getSala().getId(),
+                reposicaoAtualizada.getDataReposicao(),
+                reposicaoAtualizada.getHorarioInicio(),
+                reposicaoAtualizada.getHorarioFim()) > 0) {
+            throw new RuntimeException("A sala selecionada está ocupada por outra atividade neste horário.");
+        }
+
+        if (repository.verificarConflitoTurmaAtualizacao(
+                id,
+                reposicaoAtualizada.getTurma().getId(),
+                reposicaoAtualizada.getDataReposicao(),
+                reposicaoAtualizada.getHorarioInicio(),
+                reposicaoAtualizada.getHorarioFim()) > 0) {
+            throw new RuntimeException("A turma possui conflito com outra atividade agendada neste horário.");
+        }
+
+        reposicaoAtualizada.setId(id);
+        return repository.save(reposicaoAtualizada);
+    }
 }
