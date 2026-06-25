@@ -24,7 +24,7 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio < :horarioFim
             AND r.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoSala(Long salaId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarConflitoSala(Long salaId, LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(r) FROM Reposicao r WHERE r.habilitado = true
@@ -33,7 +33,7 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio < :horarioFim
             AND r.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoTurma(Long turmaId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarConflitoTurma(Long turmaId,  LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(r) FROM Reposicao r WHERE r.habilitado = true
@@ -43,7 +43,7 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio = :horarioInicio
             AND r.horarioFim = :horarioFim
         """)
-    Long verificarReposicaoDuplicada(Long disciplinaId, Long turmaId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarReposicaoDuplicada(Long disciplinaId, Long turmaId, LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 
     // UPDATE
 
@@ -55,7 +55,7 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio < :horarioFim
             AND r.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoProfessorAtualizacao(Long reposicaoId, Long professorId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarConflitoProfessorAtualizacao(Long reposicaoId, Long professorId,  LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(r) FROM Reposicao r WHERE r.habilitado = true
@@ -65,7 +65,7 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio < :horarioFim
             AND r.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoSalaAtualizacao(Long reposicaoId, Long salaId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarConflitoSalaAtualizacao(Long reposicaoId, Long salaId,  LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(r) FROM Reposicao r WHERE r.habilitado = true
@@ -75,7 +75,7 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio < :horarioFim
             AND r.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoTurmaAtualizacao(Long reposicaoId, Long turmaId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarConflitoTurmaAtualizacao(Long reposicaoId, Long turmaId,  LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(r) FROM Reposicao r WHERE r.habilitado = true
@@ -86,6 +86,6 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
             AND r.horarioInicio = :horarioInicio
             AND r.horarioFim = :horarioFim
         """)
-    Long verificarReposicaoDuplicadaAtualizacao(Long reposicaoId, Long disciplinaId, Long turmaId, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
+    Long verificarReposicaoDuplicadaAtualizacao(Long reposicaoId, Long disciplinaId, Long turmaId,  LocalDate dataAulaOriginal, LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim);
 }
 

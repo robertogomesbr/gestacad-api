@@ -79,7 +79,7 @@ public class ReposicaoController {
             description = "Exemplo de um endpoint responsável por listar a reposição do sistema a partir do seu ID."
     )
     @GetMapping("/{id}")
-    public Reposicao obtenerPorID(@PathVariable Long id) {
+    public Reposicao obterPorID(@PathVariable Long id) {
         return reposicaoService.obterPorID(id);
     }
 
@@ -88,7 +88,7 @@ public class ReposicaoController {
             description = "Exemplo de um endpoint responsável por atualizar a reposição do sistema a partir do seu ID."
     )
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody ReposicaoRequest reposicaoRequest, HttpServletRequest request) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody @Valid ReposicaoRequest reposicaoRequest, HttpServletRequest request) {
         try {
             Reposicao reposicao = reposicaoRequest.build();
             reposicao.setDisciplina(disciplinaService.obterPorID(reposicaoRequest.getIdDisciplina()));
