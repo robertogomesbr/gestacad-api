@@ -35,4 +35,5 @@ docker-compose up -d
 
 - [@robertogomesbr](https://github.com/robertogomesbr)
 - [@rhuangomes10](https://github.com/rhuangomes10)
+- [@Jessicajeje](https://github.com/Jessicajeje)
 
