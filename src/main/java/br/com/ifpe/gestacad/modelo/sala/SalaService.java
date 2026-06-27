@@ -17,6 +17,11 @@ public class SalaService {
     @Transactional
     public Sala save(Sala sala, Usuario usuarioLogado) {
 
+        if(repository.verificarDuplicidade(sala.getBloco(), sala.getNumero(), sala.getTipo()) > 0) {
+            throw new RuntimeException("Já existe uma sala cadastrada com o mesmo bloco, número e tipo.");
+
+        }
+
         sala.setHabilitado(Boolean.TRUE);
         sala.setCriadoPor(usuarioLogado);
         return repository.save(sala);

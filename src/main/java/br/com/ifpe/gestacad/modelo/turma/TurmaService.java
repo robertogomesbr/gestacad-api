@@ -16,6 +16,10 @@ public class TurmaService {
     @Transactional
     public Turma save(Turma turma) {
 
+        if(repository.verificarDuplicidade(turma.getTurno(), turma.getCurso().getId(), turma.getSemestreEntrada(), turma.getAnoEntrada()) > 0) {
+            throw new RuntimeException("Já existe uma turma cadastrada com os mesmos dados.");
+        }
+
         turma.setHabilitado(Boolean.TRUE);
         turma.setStatusTurma(Boolean.TRUE);
         return repository.save(turma);

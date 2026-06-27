@@ -20,4 +20,8 @@ public interface TurmaRepository extends JpaRepository<Turma, Long> {
     // Nova query para combinar Turno e Curso (Relacionamento)
     @Query(value = "SELECT t FROM Turma t WHERE t.turno ilike %:turno% AND t.curso.id = :idCurso")
     List<Turma> consultarPorTurnoECurso(String turno, Long idCurso);
+
+    //verificar duplicidade de turma no cadastro
+    @Query("SELECT COUNT(t) FROM Turma t WHERE t.turno = :turno AND t.semestreEntrada = :semestreEntrada AND t.anoEntrada = :anoEntrada AND t.curso.id = :idCurso")
+    Long verificarDuplicidade( String turno, Long idCurso, String semestreEntrada, Integer anoEntrada);
 }
