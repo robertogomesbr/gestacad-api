@@ -1,10 +1,18 @@
 package br.com.ifpe.gestacad.modelo.reposicao;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
 import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
+import br.com.ifpe.gestacad.modelo.professor.Professor;
+import br.com.ifpe.gestacad.modelo.professor.ProfessorRepository;
+import br.com.ifpe.gestacad.modelo.sala.Sala;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -16,8 +24,54 @@ public class ReposicaoService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private ProfessorRepository professorRepository;
+
+
+      public List<Sala> obterSalasDisponiveis(LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim) {
+        if (dataReposicao == null || horarioInicio == null || horarioFim == null) {
+            throw new IllegalArgumentException("Data e horários precisam ser informados.");
+        }
+        
+        return repository.listarSalasDisponiveis(dataReposicao, horarioInicio, horarioFim);
+    }
+
     @Transactional
     public Reposicao save(Reposicao reposicao, Usuario usuarioLogado) {
+
+        Professor professor = professorRepository.findById(reposicao.getProfessor().getId())
+                .orElseThrow(() -> new RuntimeException("Professor não encontrado no sistema."));
+
+        if (Boolean.FALSE.equals(professor.isAtivo())) {
+            throw new RuntimeException(
+                    "Não é possível agendar reposições para um professor inativo no sistema. Aguarde a validação do Admin.");
+        }
+
+        if (reposicao.getDataReposicao().isBefore(reposicao.getDataAulaOriginal())) {
+            throw new RuntimeException("A data de reposição não pode ser anterior à data da aula original.");
+
+        }
+
+        if(reposicao.getHorarioInicio().isAfter(reposicao.getHorarioFim())) {
+            throw new RuntimeException("O horário de início não pode ser posterior ao horário de término.");
+        }
+
+         // Regra de Fim de Semana (Bloqueia Domingo)
+        DayOfWeek diaSemana = reposicao.getDataReposicao().getDayOfWeek();
+        if (diaSemana == DayOfWeek.SUNDAY) {
+            throw new RuntimeException("Não é permitido agendar reposições de aulas aos domingos.");
+        }
+        //evita reposição repentina
+        if(reposicao.getDataReposicao().atTime(reposicao.getHorarioInicio()).isBefore(java.time.LocalDateTime.now().plusHours(48))) {
+            throw new RuntimeException("A reposição deve ser agendada com pelo menos 48 horas de antecedência.");
+
+        }
+        //evita agendamento de reposição para outro professor
+        if (!usuarioLogado.getId().equals(professor.getUsuario().getId())) {
+    throw new RuntimeException("Você não tem permissão para agendar reposições para outro professor.");
+}
+
+
         if (repository.verificarReposicaoDuplicada(
                 reposicao.getDisciplina().getId(),
                 reposicao.getTurma().getId(),
@@ -75,16 +129,6 @@ public class ReposicaoService {
                 reposicaoAlterada.getHorarioInicio(),
                 reposicaoAlterada.getHorarioFim()) > 0) {
             throw new RuntimeException("Já existe outra reposição idêntica cadastrada para este mesmo horário.");
-        }
-
-        if (repository.verificarConflitoProfessorAtualizacao(
-                id,
-                reposicaoAlterada.getProfessor().getId(),
-                reposicaoAlterada.getDataAulaOriginal(),
-                reposicaoAlterada.getDataReposicao(),
-                reposicaoAlterada.getHorarioInicio(),
-                reposicaoAlterada.getHorarioFim()) > 0) {
-            throw new RuntimeException("O professor selecionado possui conflito com outra atividade neste horário.");
         }
 
         if (repository.verificarConflitoSalaAtualizacao(

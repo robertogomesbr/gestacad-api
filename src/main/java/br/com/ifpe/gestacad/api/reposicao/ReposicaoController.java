@@ -1,15 +1,30 @@
 package br.com.ifpe.gestacad.api.reposicao;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.disciplina.DisciplinaService;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorService;
 import br.com.ifpe.gestacad.modelo.reposicao.Reposicao;
 import br.com.ifpe.gestacad.modelo.reposicao.ReposicaoService;
+import br.com.ifpe.gestacad.modelo.sala.Sala;
 import br.com.ifpe.gestacad.modelo.sala.SalaService;
 import br.com.ifpe.gestacad.modelo.turma.TurmaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -112,5 +127,15 @@ public class ReposicaoController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         reposicaoService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+   @GetMapping("/salas-disponiveis")
+    public ResponseEntity<List<Sala>> obterSalasDisponiveis(
+            @RequestParam("dataReposicao") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataReposicao,
+            @RequestParam("horarioInicio") @DateTimeFormat(pattern = "HH:mm[:ss]") LocalTime horarioInicio,
+            @RequestParam("horarioFim") @DateTimeFormat(pattern = "HH:mm[:ss]") LocalTime horarioFim) {
+        
+        List<Sala> salas = reposicaoService.obterSalasDisponiveis(dataReposicao, horarioInicio, horarioFim);
+        return ResponseEntity.ok(salas);
     }
 }
