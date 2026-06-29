@@ -40,6 +40,10 @@ public class SalaService {
     @Transactional
     public void update(Long id, Sala salaAlterada, Usuario usuarioLogado) {
 
+        if(repository.verificarDuplicidade(salaAlterada.getBloco(), salaAlterada.getNumero(), salaAlterada.getTipo()) > 0) {
+            throw new RuntimeException("Já existe uma sala cadastrada com o mesmo bloco, número e tipo.");
+        }
+
         Sala sala = repository.findById(id).get();
         sala.setBloco(salaAlterada.getBloco());
         sala.setNumero(salaAlterada.getNumero());

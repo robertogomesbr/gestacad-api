@@ -16,6 +16,10 @@ public class CursoService {
 
     @Transactional
     public Curso save(Curso curso, Usuario usuarioLogado) {
+
+        if(repository.verificarDuplicidade(curso.getNome(), curso.getArea()) > 0) {
+            throw new RuntimeException("Já existe um curso cadastrado com o mesmo nome e área.");
+        }
         
         curso.setHabilitado(Boolean.TRUE);
         curso.setCriadoPor(usuarioLogado);
@@ -35,6 +39,10 @@ public class CursoService {
 
     @Transactional
     public void update(Long id, Curso cursoAlterada, Usuario usuarioLogado) {
+
+        if(repository.verificarDuplicidade(cursoAlterada.getNome(), cursoAlterada.getArea()) > 0) {
+            throw new RuntimeException("Já existe um curso cadastrado com o mesmo nome e área.");
+        }
 
         Curso curso = repository.findById(id).get();
         curso.setNome(cursoAlterada.getNome());
