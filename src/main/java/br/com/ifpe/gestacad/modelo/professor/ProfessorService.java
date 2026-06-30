@@ -76,15 +76,6 @@ public class ProfessorService {
         repository.save(professor);
     }
 
-    @Transactional
-    public void delete(Long id) {
-
-        Professor professor = repository.findById(id).get();
-        professor.setHabilitado(Boolean.FALSE);
-
-        repository.save(professor);
-    }
-
     public List<Professor> filtrar(String nome, String cpf) {
 
         List<Professor> listaProfessores = repository.findAll();
@@ -112,7 +103,7 @@ public class ProfessorService {
             usuario.setHabilitado(false);
             usuarioRepository.save(usuario);
         }
-        
+
         repository.delete(professor);
 
     
