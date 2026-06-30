@@ -3,11 +3,13 @@ package br.com.ifpe.gestacad.modelo.professor;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.ifpe.gestacad.modelo.acesso.Perfil;
 import br.com.ifpe.gestacad.modelo.acesso.PerfilRepository;
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioRepository;
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import jakarta.transaction.Transactional;
@@ -19,15 +21,16 @@ public class ProfessorService {
     private ProfessorRepository repository;
 
     @Autowired
-   private UsuarioService usuarioService;
+    private UsuarioService usuarioService;
 
-   @Autowired
-   private PerfilRepository perfilUsuarioRepository;
-
+    @Autowired
+    private PerfilRepository perfilUsuarioRepository;
 
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Transactional
     public Professor save(Professor professor, Usuario usuarioLogado) {
@@ -35,15 +38,14 @@ public class ProfessorService {
         usuarioService.save(professor.getUsuario());
 
         for (Perfil perfil : professor.getUsuario().getRoles()) {
-           perfil.setHabilitado(Boolean.TRUE);
-           perfilUsuarioRepository.save(perfil);
-      }
-
+            perfil.setHabilitado(Boolean.TRUE);
+            perfilUsuarioRepository.save(perfil);
+        }
 
         professor.setHabilitado(Boolean.TRUE);
         professor.setCriadoPor(usuarioLogado);
         Professor professorSalvo = repository.save(professor);
-        
+
         emailService.enviarEmailSolicitacaoCadastroProfessor(professorSalvo);
 
         return professorSalvo;
@@ -71,7 +73,6 @@ public class ProfessorService {
 
         professor.setUltimaModificacaoPor(usuarioLogado);
 
-
         repository.save(professor);
     }
 
@@ -86,21 +87,35 @@ public class ProfessorService {
 
     public List<Professor> filtrar(String nome, String cpf) {
 
-       List<Professor> listaProfessores = repository.findAll();
+        List<Professor> listaProfessores = repository.findAll();
 
-       if ((nome != null && !"".equals(nome))) {
-               listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
-       }else if (
-           (nome == null || "".equals(cpf))) {    
-               listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
-           }else if (
-           (nome != null && !"".equals(nome)) &&
-              (cpf != null && !"".equals(cpf))) {    
-                listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
-                listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
-              }
+        if ((nome != null && !"".equals(nome))) {
+            listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+        } else if ((nome == null || "".equals(cpf))) {
+            listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
+        } else if ((nome != null && !"".equals(nome)) &&
+                (cpf != null && !"".equals(cpf))) {
+            listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+            listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
+        }
 
-       return listaProfessores;
-}
+        return listaProfessores;
+    }
+
+    @Transactional
+    public void reprovarProfessor(Long professorId) {
+        Professor professor = repository.findById(professorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Professor não encontrado"));
+
+        Usuario usuario = professor.getUsuario();
+        if (usuario != null) {
+            usuario.setHabilitado(false);
+            usuarioRepository.save(usuario);
+        }
+        
+        repository.delete(professor);
+
+    
+    }
 
 }

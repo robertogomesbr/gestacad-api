@@ -78,6 +78,7 @@ public class ProfessorController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
         professorService.delete(id);
+        professorService.reprovarProfessor(id);
         return ResponseEntity.ok().build();
     }
 
