@@ -44,7 +44,7 @@ public class ProfessorService {
         professor.setCriadoPor(usuarioLogado);
         Professor professorSalvo = repository.save(professor);
         
-        emailService.enviarEmailConfirmacaoCadastroProfessor(professorSalvo);
+        emailService.enviarEmailSolicitacaoCadastroProfessor(professorSalvo);
 
         return professorSalvo;
     }
