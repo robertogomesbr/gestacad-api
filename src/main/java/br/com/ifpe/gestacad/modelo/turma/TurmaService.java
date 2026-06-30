@@ -38,7 +38,7 @@ public class TurmaService {
     @Transactional
     public void update(Long id, Turma turmaAlterada) {
 
-        if(repository.verificarDuplicidade(turmaAlterada.getTurno(), turmaAlterada.getCurso().getId(), turmaAlterada.getSemestreEntrada(), turmaAlterada.getAnoEntrada()) > 0) {
+        if(repository.verificarDuplicidadeAtualizacao(turmaAlterada.getId(), turmaAlterada.getTurno(), turmaAlterada.getCurso().getId(), turmaAlterada.getSemestreEntrada(), turmaAlterada.getAnoEntrada()) > 0) {
             throw new RuntimeException("Já existe uma turma cadastrada com os mesmos dados.");
         }
 

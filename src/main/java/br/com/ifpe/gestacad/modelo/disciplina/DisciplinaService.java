@@ -39,7 +39,7 @@ public class DisciplinaService {
     @Transactional
     public void update(Long id, Disciplina disciplinaAlterada, Usuario usuarioLogado) {
 
-        if(repository.verificarDuplicidade(disciplinaAlterada.getNome(), disciplinaAlterada.getCurso().getId()) > 0) {
+        if(repository.verificarDuplicidadeAtualizacao(disciplinaAlterada.getId(), disciplinaAlterada.getNome(), disciplinaAlterada.getCurso().getId()) > 0) {
             throw new RuntimeException("Já existe uma disciplina cadastrada com o mesmo nome para este curso.");
         }
 

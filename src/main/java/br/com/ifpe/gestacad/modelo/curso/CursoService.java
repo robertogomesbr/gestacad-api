@@ -40,7 +40,7 @@ public class CursoService {
     @Transactional
     public void update(Long id, Curso cursoAlterada, Usuario usuarioLogado) {
 
-        if(repository.verificarDuplicidade(cursoAlterada.getNome(), cursoAlterada.getArea()) > 0) {
+        if(repository.verificarDuplicidadeAtualizacao(cursoAlterada.getId(), cursoAlterada.getNome(), cursoAlterada.getArea()) > 0) {
             throw new RuntimeException("Já existe um curso cadastrado com o mesmo nome e área.");
         }
 

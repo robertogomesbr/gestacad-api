@@ -18,5 +18,9 @@ public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {
 
     @Query("SELECT COUNT(d) FROM Disciplina d WHERE d.nome = :nome AND d.curso.id = :idCurso")
     Long verificarDuplicidade(String nome, Long idCurso);
+
+    @Query("SELECT COUNT(d) FROM Disciplina d WHERE d.id <> :id and d.nome = :nome AND d.curso.id = :idCurso")
+    Long verificarDuplicidadeAtualizacao(Long id, String nome, Long idCurso);
 }
+
 

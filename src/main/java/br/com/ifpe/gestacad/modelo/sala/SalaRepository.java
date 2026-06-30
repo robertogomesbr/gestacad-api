@@ -30,4 +30,7 @@ public interface SalaRepository extends JpaRepository<Sala, Long> {
     //evitar duplicidade em cadastrar salas
     @Query("SELECT COUNT(s) FROM Sala s WHERE s.bloco = :bloco AND s.numero = :numero AND s.tipo = :tipo")
     Long verificarDuplicidade(@Param("bloco") String bloco, @Param("numero") Integer numero, @Param("tipo") String tipo);
+
+     @Query("SELECT COUNT(s) FROM Sala s WHERE s.id <> :id and s.bloco = :bloco AND s.numero = :numero AND s.tipo = :tipo")
+    Long verificarDuplicidadeAtualizacao(Long id, @Param("bloco") String bloco, @Param("numero") Integer numero, @Param("tipo") String tipo);
 }

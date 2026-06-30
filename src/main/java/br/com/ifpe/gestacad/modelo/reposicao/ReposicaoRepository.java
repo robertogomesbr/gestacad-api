@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import br.com.ifpe.gestacad.modelo.horario.Horario;
 import br.com.ifpe.gestacad.modelo.sala.Sala;
 public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
 
@@ -117,21 +118,32 @@ public interface ReposicaoRepository extends JpaRepository<Reposicao, Long> {
     // ==========================================
     // BUSCA DINÂMICA DE SALAS DISPONÍVEIS
     // ==========================================
-    @Query("""
-        SELECT s FROM Sala s 
-        WHERE s.habilitado = true 
-        AND s.id NOT IN (
-            SELECT r.sala.id FROM Reposicao r 
-            WHERE r.habilitado = true 
-            AND r.dataReposicao = :dataReposicao
-            AND r.horarioInicio < :horarioFim
-            AND r.horarioFim > :horarioInicio
-        )
-    """)
+@Query("""
+    SELECT s FROM Sala s 
+    WHERE s.habilitado = true 
+    AND s.id NOT IN (
+        SELECT r.sala.id FROM Reposicao r 
+        WHERE r.habilitado = true 
+        AND r.dataReposicao = :dataReposicao
+        AND r.horarioInicio < :horarioFim
+        AND r.horarioFim > :horarioInicio
+    ) 
+    AND s.id NOT IN (
+        SELECT a.sala.id FROM AlocacaoAula a 
+        JOIN a.horarios h 
+        WHERE a.habilitado = true 
+        AND a.semestreLetivo = :semestreLetivo
+        AND h.diaSemana = :diaSemana
+        AND h.horarioInicio < :horarioFim
+        AND h.horarioFim > :horarioInicio
+    )
+""")
     List<Sala> listarSalasDisponiveis(
         @Param("dataReposicao") LocalDate dataReposicao,
         @Param("horarioInicio") LocalTime horarioInicio,
-        @Param("horarioFim") LocalTime horarioFim
+        @Param("horarioFim") LocalTime horarioFim,
+        @Param("diaSemana") String diaDaSemana,
+        @Param("semestreLetivo") String semestreLetivo
     );
 }
 

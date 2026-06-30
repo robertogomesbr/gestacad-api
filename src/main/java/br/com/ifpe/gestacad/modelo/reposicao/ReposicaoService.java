@@ -27,15 +27,14 @@ public class ReposicaoService {
     @Autowired
     private ProfessorRepository professorRepository;
 
-
-      public List<Sala> obterSalasDisponiveis(LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim) {
-        if (dataReposicao == null || horarioInicio == null || horarioFim == null) {
-            throw new IllegalArgumentException("Data e horários precisam ser informados.");
+    public List<Sala> obterSalasDisponiveis(LocalDate dataReposicao, LocalTime horarioInicio, LocalTime horarioFim, String diaSemana, String semestreLetivo) {
+        if (dataReposicao == null || horarioInicio == null || horarioFim == null || diaSemana == null || semestreLetivo == null) {
+            throw new IllegalArgumentException("Todos os parâmetros de data, horários, dia da semana e semestre precisam ser informados.");
         }
         
-        return repository.listarSalasDisponiveis(dataReposicao, horarioInicio, horarioFim);
+        // Passa exatamente os 5 parâmetros recebidos para o Repository
+        return repository.listarSalasDisponiveis(dataReposicao, horarioInicio, horarioFim, diaSemana, semestreLetivo);
     }
-
     @Transactional
     public Reposicao save(Reposicao reposicao, Usuario usuarioLogado) {
 
