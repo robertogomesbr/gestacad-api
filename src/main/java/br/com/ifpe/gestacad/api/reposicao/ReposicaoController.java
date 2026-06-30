@@ -30,10 +30,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/reposicao")
 @CrossOrigin
-@Tag(
-        name = "API Reposição",
-        description = "API responsável pelos serviços de reposição no sistema"
-)
+@Tag(name = "API Reposição", description = "API responsável pelos serviços de reposição no sistema")
 public class ReposicaoController {
 
     @Autowired
@@ -54,12 +51,10 @@ public class ReposicaoController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Operation(
-            summary = "Serviço responsável pela criação de uma reposição no sistema.",
-            description = "Exemplo de um endpoint responsável pela criação de uma reposição no sistema"
-    )
+    @Operation(summary = "Serviço responsável pela criação de uma reposição no sistema.", description = "Exemplo de um endpoint responsável pela criação de uma reposição no sistema")
     @PostMapping
-    public ResponseEntity<Reposicao> save(@RequestBody @Valid ReposicaoRequest reposicaoRequest, HttpServletRequest request) {
+    public ResponseEntity<Reposicao> save(@RequestBody @Valid ReposicaoRequest reposicaoRequest,
+            HttpServletRequest request) {
 
         Reposicao reposicaoNova = reposicaoRequest.build();
         reposicaoNova.setDisciplina(disciplinaService.obterPorID(reposicaoRequest.getIdDisciplina()));
@@ -71,32 +66,24 @@ public class ReposicaoController {
         return new ResponseEntity<>(reposicao, HttpStatus.CREATED);
     }
 
-    @Operation(
-            summary = "Serviço responsável por listar as reposições do sistema.",
-            description = "Exemplo de um endpoint responsável por listar as reposições do sistema."
-    )
+    @Operation(summary = "Serviço responsável por listar as reposições do sistema.", description = "Exemplo de um endpoint responsável por listar as reposições do sistema.")
     @GetMapping
     public List<Reposicao> listarTodos() {
 
         return reposicaoService.listarTodos();
     }
 
-    @Operation(
-            summary = "Serviço responsável por listar a reposição do sistema a partir do seu ID.",
-            description = "Exemplo de um endpoint responsável por listar a reposição do sistema a partir do seu ID."
-    )
+    @Operation(summary = "Serviço responsável por listar a reposição do sistema a partir do seu ID.", description = "Exemplo de um endpoint responsável por listar a reposição do sistema a partir do seu ID.")
     @GetMapping("/{id}")
     public Reposicao obterPorID(@PathVariable Long id) {
 
         return reposicaoService.obterPorID(id);
     }
 
-    @Operation(
-            summary = "Serviço responsável por atualizar a reposição do sistema a partir do seu ID.",
-            description = "Exemplo de um endpoint responsável por atualizar a reposição do sistema a partir do seu ID."
-    )
+    @Operation(summary = "Serviço responsável por atualizar a reposição do sistema a partir do seu ID.", description = "Exemplo de um endpoint responsável por atualizar a reposição do sistema a partir do seu ID.")
     @PutMapping("/{id}")
-    public ResponseEntity<Reposicao> update(@PathVariable("id") Long id, @RequestBody ReposicaoRequest reposicaoRequest, HttpServletRequest request) {
+    public ResponseEntity<Reposicao> update(@PathVariable("id") Long id, @RequestBody ReposicaoRequest reposicaoRequest,
+            HttpServletRequest request) {
 
         Reposicao reposicao = reposicaoRequest.build();
         reposicao.setDisciplina(disciplinaService.obterPorID(reposicaoRequest.getIdDisciplina()));
@@ -108,10 +95,7 @@ public class ReposicaoController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(
-            summary = "Serviço responsável por deletar a reposição do sistema a partir do seu ID.",
-            description = "Exemplo de um endpoint responsável por deletar a reposição do sistema a partir do seu ID."
-    )
+    @Operation(summary = "Serviço responsável por deletar a reposição do sistema a partir do seu ID.", description = "Exemplo de um endpoint responsável por deletar a reposição do sistema a partir do seu ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
