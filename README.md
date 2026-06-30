@@ -16,18 +16,18 @@ Projeto desenvolvido no IFPE com objetivo de gerenciar salas e laboratórios, e 
 
 ## Para rodar o projeto siga os passos abaixo  e execute os comandos:
 
-- Baixe o projeto do repositório git, exemplo:
+1. Baixe o projeto do repositório git, exemplo:
 ```bash
 git clone https://github.com/robertogomesbr/gestacad-api.git
 ```
 
-- Entre na pasta do projeto e execute o comando abaixo para levantar o banco de dados:
+2. Entre na pasta do projeto e execute o comando abaixo para levantar o banco de dados:
 
 ```bash
 docker-compose up -d
 ```
 
-- Ainda na pasta do projeto, execute o comando abaixo para rodar o projeto:
+3. Ainda na pasta do projeto, execute o comando abaixo para rodar o projeto:
 ```bash
 ./mvnw spring-boot:run
 ```
