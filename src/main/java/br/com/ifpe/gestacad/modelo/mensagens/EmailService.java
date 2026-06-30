@@ -54,11 +54,11 @@ public class EmailService {
     }
 
     @Async("emailExecutor")
-    public void enviarEmailConfirmacaoCadastroProfessor(Professor professor) {
-        String assuntoEmail = "Bem vindo a nossa plataforma!";
+    public void enviarEmailSolicitacaoCadastroProfessor(Professor professor) {
+        String assuntoEmail = "Solicitacao de Cadastro Enviada com Sucesso";
         Context params = new Context();
         params.setVariable("professor", professor);
-        this.processAndSend("cadastro_professor", professor.getUsuario().getUsername(), assuntoEmail, params);
+        this.processAndSend("solicitacao_professor", professor.getUsuario().getUsername(), assuntoEmail, params);
     }
 
     @Async("emailExecutor")

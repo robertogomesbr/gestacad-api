@@ -7,10 +7,13 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import br.com.ifpe.gestacad.util.exception.AutenticacaoException;
 
 @RestControllerAdvice
 public class TratadorErros {
@@ -19,6 +22,18 @@ public class TratadorErros {
    public ResponseEntity<String> tratarErro500(Exception ex) {
 
        return ResponseEntity.internalServerError().body(ex.getMessage());
+   }
+
+   @ExceptionHandler(AutenticacaoException.class)
+   public ResponseEntity<String> tratarErroAutenticacao(AutenticacaoException ex) {
+
+       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+   }
+
+   @ExceptionHandler(BadCredentialsException.class)
+   public ResponseEntity<String> tratarCredenciaisInvalidas(BadCredentialsException ex) {
+
+       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuário ou senha inválidos.");
    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
