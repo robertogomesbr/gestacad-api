@@ -35,6 +35,10 @@ public class ProfessorService {
     @Transactional
     public Professor save(Professor professor, Usuario usuarioLogado) {
 
+        if(repository.verificarDuplicidadeEmail(professor.getUsuario()) > 0) {
+            throw new RuntimeException("Já existe um professor cadastrado com o mesmo email.");
+        }
+
         usuarioService.save(professor.getUsuario());
 
         for (Perfil perfil : professor.getUsuario().getRoles()) {
@@ -63,6 +67,10 @@ public class ProfessorService {
 
     @Transactional
     public void update(Long id, Professor professorAlterado, Usuario usuarioLogado) {
+
+        if (repository.verificarDuplicidadeEmailAtualizacao(professorAlterado.getId(), professorAlterado.getUsuario()) > 0) {
+            throw new RuntimeException("Já existe um professor cadastrado com o mesmo email.");
+        }
 
         Professor professor = repository.findById(id).get();
         professor.setNome(professorAlterado.getNome());

@@ -16,6 +16,10 @@ public class TurmaService {
     @Transactional
     public Turma save(Turma turma) {
 
+        if(repository.verificarDuplicidade(turma.getTurno(), turma.getCurso().getId(), turma.getSemestreEntrada(), turma.getAnoEntrada()) > 0) {
+            throw new RuntimeException("Já existe uma turma cadastrada com os mesmos dados.");
+        }
+
         turma.setHabilitado(Boolean.TRUE);
         turma.setStatusTurma(Boolean.TRUE);
         return repository.save(turma);
@@ -33,6 +37,10 @@ public class TurmaService {
 
     @Transactional
     public void update(Long id, Turma turmaAlterada) {
+
+        if(repository.verificarDuplicidadeAtualizacao(turmaAlterada.getId(), turmaAlterada.getTurno(), turmaAlterada.getCurso().getId(), turmaAlterada.getSemestreEntrada(), turmaAlterada.getAnoEntrada()) > 0) {
+            throw new RuntimeException("Já existe uma turma cadastrada com os mesmos dados.");
+        }
 
         Turma turma = repository.findById(id).get();
         turma.setCurso(turmaAlterada.getCurso());
