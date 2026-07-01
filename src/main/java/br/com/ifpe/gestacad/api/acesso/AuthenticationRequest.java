@@ -17,5 +17,8 @@ public class AuthenticationRequest {
 
     @NotBlank
     private String password;
-    
+
+    @Builder.Default
+    private boolean loginAdmin = false;
+
 }

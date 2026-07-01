@@ -27,10 +27,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/sala")
 @CrossOrigin
-@Tag(
-        name = "API Sala",
-        description = "API responsável pelos serviços de sala no sistema"
-)
+@Tag(name = "API Sala", description = "API responsável pelos serviços de sala no sistema")
 public class SalaController {
 
     @Autowired
@@ -39,10 +36,7 @@ public class SalaController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Operation(
-            summary = "Serviço responsável pela criação de uma sala no sistema.",
-            description = "Exemplo de um endpoint responsável pela criação de uma sala no sistema"
-    )
+    @Operation(summary = "Serviço responsável pela criação de uma sala no sistema.", description = "Exemplo de um endpoint responsável pela criação de uma sala no sistema")
     @PostMapping
     public ResponseEntity<Sala> save(@RequestBody @Valid SalaRequest salaRequest, HttpServletRequest request) {
 
@@ -50,41 +44,30 @@ public class SalaController {
         return new ResponseEntity<>(sala, HttpStatus.CREATED);
     }
 
-    @Operation(
-            summary = "Serviço responsável por listas as salas do sistema.",
-            description = "Exemplo de um endpoint responsável por listas as salas do sistema"
-    )
+    @Operation(summary = "Serviço responsável por listas as salas do sistema.", description = "Exemplo de um endpoint responsável por listas as salas do sistema")
     @GetMapping
     public List<Sala> listarTodos() {
 
         return salaService.listarTodos();
     }
 
-    @Operation(
-            summary = "Serviço responsável por listas as salas do sistema a partir do ID.",
-            description = "Exemplo de um endpoint responsável por listas as salas do sistema a partir do ID."
-    )
+    @Operation(summary = "Serviço responsável por listas as salas do sistema a partir do ID.", description = "Exemplo de um endpoint responsável por listas as salas do sistema a partir do ID.")
     @GetMapping("/{id}")
     public Sala obterPorID(@PathVariable Long id) {
 
         return salaService.obterPorID(id);
     }
 
-    @Operation(
-            summary = "Serviço responsável por atualizar uma sala do sistema a partir do ID.",
-            description = "Exemplo de um endpoint responsável por atualizar uma sala do sistema a partir do ID."
-    )
+    @Operation(summary = "Serviço responsável por atualizar uma sala do sistema a partir do ID.", description = "Exemplo de um endpoint responsável por atualizar uma sala do sistema a partir do ID.")
     @PutMapping("/{id}")
-    public ResponseEntity<Sala> update(@PathVariable("id") Long id, @RequestBody @Valid SalaRequest salaRequest, HttpServletRequest request) {
+    public ResponseEntity<Sala> update(@PathVariable("id") Long id, @RequestBody @Valid SalaRequest salaRequest,
+            HttpServletRequest request) {
 
         salaService.update(id, salaRequest.build(), usuarioService.obterUsuarioLogado(request));
         return ResponseEntity.ok().build();
     }
 
-    @Operation(
-            summary = "Serviço responsável por deletar uma sala do sistema a partir do ID.",
-            description = "Exemplo de um endpoint responsável por deletar uma sala do sistema a partir do ID."
-    )
+    @Operation(summary = "Serviço responsável por deletar uma sala do sistema a partir do ID.", description = "Exemplo de um endpoint responsável por deletar uma sala do sistema a partir do ID.")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
 
@@ -92,13 +75,13 @@ public class SalaController {
         return ResponseEntity.ok().build();
     }
 
-     @PostMapping("/filtrar")
-   public List<Sala> filtrar(
-           @RequestParam(value = "bloco", required = false) String bloco,
-           @RequestParam(value = "tipo", required = false) String tipo,
-           @RequestParam(value = "numero", required = false) Integer numero) {
+    @PostMapping("/filtrar")
+    public List<Sala> filtrar(
+            @RequestParam(value = "bloco", required = false) String bloco,
+            @RequestParam(value = "tipo", required = false) String tipo,
+            @RequestParam(value = "numero", required = false) Integer numero) {
 
-       return salaService.filtrar(bloco, tipo, numero);
-   }
+        return salaService.filtrar(bloco, tipo, numero);
+    }
 
 }
