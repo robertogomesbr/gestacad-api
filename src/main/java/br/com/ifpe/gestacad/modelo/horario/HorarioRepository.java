@@ -13,30 +13,33 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
             SELECT COUNT(h) FROM Horario h WHERE h.habilitado = true
             AND h.diaSemana = :diaSemana
             AND h.alocacaoAula.professor.id = :professorId
+            AND h.alocacaoAula.semestreLetivo = :semestre
             AND h.horarioInicio < :horarioFim
             AND h.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoProfessor(Long professorId, String diaSemana, LocalTime horarioInicio,
+    Long verificarConflitoProfessor(Long professorId, String semestre, String diaSemana, LocalTime horarioInicio,
         LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(h) FROM Horario h WHERE h.habilitado = true
             AND h.diaSemana = :diaSemana
             AND h.alocacaoAula.sala.id = :salaId
+            AND h.alocacaoAula.semestreLetivo = :semestre
             AND h.horarioInicio < :horarioFim
             AND h.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoSala(Long salaId, String diaSemana, LocalTime horarioInicio,
+    Long verificarConflitoSala(Long salaId, String semestre, String diaSemana, LocalTime horarioInicio,
         LocalTime horarioFim);
 
     @Query("""
             SELECT COUNT(h) FROM Horario h WHERE h.habilitado = true
             AND h.diaSemana = :diaSemana
             AND h.alocacaoAula.turma.id = :turmaId
+            AND h.alocacaoAula.semestreLetivo = :semestre
             AND h.horarioInicio < :horarioFim
             AND h.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoTurma(Long turmaId, String diaSemana, LocalTime horarioInicio,
+    Long verificarConflitoTurma(Long turmaId, String semestre, String diaSemana, LocalTime horarioInicio,
         LocalTime horarioFim);
 
     @Query("""
@@ -56,10 +59,11 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
             AND h.id <> :horarioId
             AND h.diaSemana = :diaSemana
             AND h.alocacaoAula.professor.id = :professorId
+            AND h.alocacaoAula.semestreLetivo = :semestre
             AND h.horarioInicio < :horarioFim
             AND h.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoProfessorAtualizacao(Long horarioId, Long professorId, String diaSemana,
+    Long verificarConflitoProfessorAtualizacao(Long horarioId, String semestre, Long professorId, String diaSemana,
         LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
@@ -67,10 +71,11 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
             AND h.id <> :horarioId
             AND h.diaSemana = :diaSemana
             AND h.alocacaoAula.sala.id = :salaId
+            AND h.alocacaoAula.semestreLetivo = :semestre
             AND h.horarioInicio < :horarioFim
             AND h.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoSalaAtualizacao(Long horarioId, Long salaId, String diaSemana,
+    Long verificarConflitoSalaAtualizacao(Long horarioId, String semestre, Long salaId, String diaSemana,
         LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""
@@ -78,10 +83,11 @@ public interface HorarioRepository extends JpaRepository<Horario, Long> {
             AND h.id <> :horarioId
             AND h.diaSemana = :diaSemana
             AND h.alocacaoAula.turma.id = :turmaId
+            AND h.alocacaoAula.semestreLetivo = :semestre
             AND h.horarioInicio < :horarioFim
             AND h.horarioFim > :horarioInicio
         """)
-    Long verificarConflitoTurmaAtualizacao(Long horarioId, Long turmaId, String diaSemana,
+    Long verificarConflitoTurmaAtualizacao(Long horarioId, String semestre, Long turmaId, String diaSemana,
         LocalTime horarioInicio, LocalTime horarioFim);
 
     @Query("""

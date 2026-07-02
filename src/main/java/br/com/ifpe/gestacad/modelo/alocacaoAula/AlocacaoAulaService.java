@@ -136,6 +136,7 @@ public class AlocacaoAulaService {
 
         if (horarioRepository.verificarConflitoProfessor(
                 professorId,
+                alocacao.getSemestreLetivo(),
                 horario.getDiaSemana(),
                 horario.getHorarioInicio(),
                 horario.getHorarioFim()) > 0) {
@@ -146,6 +147,7 @@ public class AlocacaoAulaService {
 
         if (horarioRepository.verificarConflitoSala(
                 salaId,
+                alocacao.getSemestreLetivo(),
                 horario.getDiaSemana(),
                 horario.getHorarioInicio(),
                 horario.getHorarioFim()) > 0) {
@@ -156,6 +158,7 @@ public class AlocacaoAulaService {
 
         if (horarioRepository.verificarConflitoTurma(
                 turmaId,
+                alocacao.getSemestreLetivo(),
                 horario.getDiaSemana(),
                 horario.getHorarioInicio(),
                 horario.getHorarioFim()) > 0) {
@@ -187,6 +190,7 @@ public class AlocacaoAulaService {
 
         if (horarioRepository.verificarConflitoProfessorAtualizacao(
                 horarioId,
+                alocacao.getSemestreLetivo(),
                 professorId,
                 horario.getDiaSemana(),
                 horario.getHorarioInicio(),
@@ -197,6 +201,7 @@ public class AlocacaoAulaService {
 
         if (horarioRepository.verificarConflitoSalaAtualizacao(
                 horarioId,
+                alocacao.getSemestreLetivo(),
                 salaId,
                 horario.getDiaSemana(),
                 horario.getHorarioInicio(),
@@ -207,6 +212,7 @@ public class AlocacaoAulaService {
 
         if (horarioRepository.verificarConflitoTurmaAtualizacao(
                 horarioId,
+                alocacao.getSemestreLetivo(),
                 turmaId,
                 horario.getDiaSemana(),
                 horario.getHorarioInicio(),
