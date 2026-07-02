@@ -18,8 +18,13 @@ public interface ProfessorRepository extends JpaRepository<Professor, Long> {
 
   // query para evitar duplicidade no email
   @Query("SELECT COUNT(p) FROM Professor p WHERE p.usuario.username = :username")
-  Long verificarDuplicidadeEmail(Usuario username);
+  Long verificarDuplicidadeEmail(String username);
 
-  @Query("SELECT COUNT(p) FROM Professor p WHERE p.id <> :id AND p.username = :nome")
-  Long verificarDuplicidadeEmailAtualizacao(Long id, Usuario username);
+  @Query("""
+      SELECT COUNT(p)
+      FROM Professor p
+      WHERE p.id <> :id
+      AND p.usuario.username = :username
+      """)
+  Long verificarDuplicidadeEmailAtualizacao(Long id, String username);
 }
