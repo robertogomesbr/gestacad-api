@@ -3,11 +3,13 @@ package br.com.ifpe.gestacad.modelo.professor;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.ifpe.gestacad.modelo.acesso.Perfil;
 import br.com.ifpe.gestacad.modelo.acesso.PerfilRepository;
 import br.com.ifpe.gestacad.modelo.acesso.Usuario;
+import br.com.ifpe.gestacad.modelo.acesso.UsuarioRepository;
 import br.com.ifpe.gestacad.modelo.acesso.UsuarioService;
 import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import jakarta.transaction.Transactional;
@@ -19,32 +21,36 @@ public class ProfessorService {
     private ProfessorRepository repository;
 
     @Autowired
-   private UsuarioService usuarioService;
+    private UsuarioService usuarioService;
 
-   @Autowired
-   private PerfilRepository perfilUsuarioRepository;
-
+    @Autowired
+    private PerfilRepository perfilUsuarioRepository;
 
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Transactional
     public Professor save(Professor professor, Usuario usuarioLogado) {
 
+        if(repository.verificarDuplicidadeEmail(professor.getUsuario()) > 0) {
+            throw new RuntimeException("Já existe um professor cadastrado com o mesmo email.");
+        }
+
         usuarioService.save(professor.getUsuario());
 
         for (Perfil perfil : professor.getUsuario().getRoles()) {
-           perfil.setHabilitado(Boolean.TRUE);
-           perfilUsuarioRepository.save(perfil);
-      }
-
+            perfil.setHabilitado(Boolean.TRUE);
+            perfilUsuarioRepository.save(perfil);
+        }
 
         professor.setHabilitado(Boolean.TRUE);
         professor.setCriadoPor(usuarioLogado);
         Professor professorSalvo = repository.save(professor);
-        
-        emailService.enviarEmailConfirmacaoCadastroProfessor(professorSalvo);
+
+        emailService.enviarEmailSolicitacaoCadastroProfessor(professorSalvo);
 
         return professorSalvo;
     }
@@ -62,6 +68,10 @@ public class ProfessorService {
     @Transactional
     public void update(Long id, Professor professorAlterado, Usuario usuarioLogado) {
 
+        if (repository.verificarDuplicidadeEmailAtualizacao(professorAlterado.getId(), professorAlterado.getUsuario()) > 0) {
+            throw new RuntimeException("Já existe um professor cadastrado com o mesmo email.");
+        }
+
         Professor professor = repository.findById(id).get();
         professor.setNome(professorAlterado.getNome());
         professor.setCpf(professorAlterado.getCpf());
@@ -71,36 +81,40 @@ public class ProfessorService {
 
         professor.setUltimaModificacaoPor(usuarioLogado);
 
-
-        repository.save(professor);
-    }
-
-    @Transactional
-    public void delete(Long id) {
-
-        Professor professor = repository.findById(id).get();
-        professor.setHabilitado(Boolean.FALSE);
-
         repository.save(professor);
     }
 
     public List<Professor> filtrar(String nome, String cpf) {
 
-       List<Professor> listaProfessores = repository.findAll();
+        List<Professor> listaProfessores = repository.findAll();
 
-       if ((nome != null && !"".equals(nome))) {
-               listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
-       }else if (
-           (nome == null || "".equals(cpf))) {    
-               listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
-           }else if (
-           (nome != null && !"".equals(nome)) &&
-              (cpf != null && !"".equals(cpf))) {    
-                listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
-                listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
-              }
+        if ((nome != null && !"".equals(nome))) {
+            listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+        } else if ((nome == null || "".equals(cpf))) {
+            listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
+        } else if ((nome != null && !"".equals(nome)) &&
+                (cpf != null && !"".equals(cpf))) {
+            listaProfessores = repository.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
+            listaProfessores = repository.findByCpfContainingIgnoreCase(cpf);
+        }
 
-       return listaProfessores;
-}
+        return listaProfessores;
+    }
+
+    @Transactional
+    public void reprovarProfessor(Long professorId) {
+        Professor professor = repository.findById(professorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Professor não encontrado"));
+
+        Usuario usuario = professor.getUsuario();
+        if (usuario != null) {
+            usuario.setHabilitado(false);
+            usuarioRepository.save(usuario);
+        }
+
+        repository.delete(professor);
+
+    
+    }
 
 }

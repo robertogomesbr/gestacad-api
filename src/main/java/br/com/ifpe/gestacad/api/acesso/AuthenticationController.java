@@ -17,6 +17,7 @@ import br.com.ifpe.gestacad.modelo.mensagens.EmailService;
 import br.com.ifpe.gestacad.modelo.professor.Professor;
 import br.com.ifpe.gestacad.modelo.professor.ProfessorRepository;
 import br.com.ifpe.gestacad.modelo.segurança.JwtService;
+import br.com.ifpe.gestacad.util.exception.AutenticacaoException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -55,27 +56,37 @@ public class AuthenticationController {
 
         Usuario authenticatedUser = usuarioService.authenticate(data.getUsername(), data.getPassword());
 
+        boolean isAdmin = authenticatedUser.getRoles().stream()
+                .anyMatch(role -> role.getNome().equals(Perfil.ROLE_ADMIN));
+
+        if (data.isLoginAdmin() && !isAdmin) {
+            throw new AutenticacaoException(AutenticacaoException.MSG_ACESSO_ADMIN_NEGADO);
+        }
+
+        if (!data.isLoginAdmin() && isAdmin) {
+            throw new AutenticacaoException(AutenticacaoException.MSG_ACESSO_PROFESSOR_NEGADO);
+        }
+
+        Professor professor = professorRepository.findByUsuario(authenticatedUser)
+                .orElse(null);
+
+        if (professor != null && !professor.isAtivo()) {
+            throw new AutenticacaoException(AutenticacaoException.MSG_PROFESSOR_PENDENTE);
+        }
+
         String jwtToken = jwtService.generateToken(authenticatedUser);
 
         Map<Object, Object> loginResponse = new HashMap<>();
         loginResponse.put("username", authenticatedUser.getUsername());
         loginResponse.put("token", jwtToken);
         loginResponse.put("tokenExpiresIn", jwtService.getExpirationTime());
-
-        boolean isAdmin = authenticatedUser.getRoles().stream()
-                .anyMatch(role -> role.getNome().equals(Perfil.ROLE_ADMIN));
-
-        boolean isProfessor = authenticatedUser.getRoles().stream()
-                .anyMatch(role -> role.getNome().equals(Perfil.ROLE_PROFESSOR));
+        loginResponse.put("admin", isAdmin);
 
         if (isAdmin) {
 
             emailService.enviarEmailLoginAdmin(authenticatedUser);
 
-        } 
-        
-        Professor professor = professorRepository.findByUsuario(authenticatedUser)
-                .orElse(null);       
+        }
 
         if (professor != null) {
             emailService.enviarEmailLoginProfessor(professor);
